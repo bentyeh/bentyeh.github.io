@@ -1,0 +1,54 @@
+{% if page.layout == 'home' %}
+
+<div class="jumbotron jumbotron-fluid header header-home">
+  <div class="container">
+
+    <div class="row">
+      <div class="col-12 col-md-4 col-lg-3 mb-3 mb-md-0">
+        <!-- TODO: vertically center align this -->
+        <img id="profile-pic" src="{{ site.baseurl }}/images/bentyeh_700px_square.jpg">
+      </div>
+      <div class="col-12 col-md-8 col-lg-9">
+        <h1>Ben Yeh</h1>
+        <h2>Stanford University | Bioengineering | 2018</h2>
+        
+        <!-- Contact -->
+        <div class="contact">
+          <ul class="list-inline banner-social-buttons">
+            <li class="list-inline-item">
+              <a class="btn btn-secondary" href="https://drive.google.com/file/d/0B4LQn_cjTzUpdXZEQ0lwSHhUYms/view">
+                <i class="fa fa-file-pdf-o fa-fw"></i> Resume
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a class="btn btn-secondary" href="mailto:bentyeh@stanford.edu">
+                <i class="fa fa-envelope-o fa-fw"></i> Email
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a class="btn btn-secondary" href="https://www.linkedin.com/in/bentyeh">
+                <i class="fa fa-linkedin-square fa-fw"></i> LinkedIn
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a class="btn btn-secondary" href="https://www.github.com/bentyeh">
+                <i class="fa fa-github fa-fw"></i> GitHub
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% else %}
+
+<div class="jumbotron jumbotron-fluid header header-page">
+  <div class="container">
+    <h1>{{ page.title }}</h1>
+    <h2>{{ page.description }}</h2>
+  </div>
+</div>
+
+{% endif %}
