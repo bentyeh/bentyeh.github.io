@@ -29,7 +29,7 @@ We trained a 5-layer neural network, achieving a relatively high accuracy of 0.7
 **Team:** Joyce Kang, Rifath Rashid
 
 <a href="https://drive.google.com/open?id=1z_RtsuLq-luNN4DpRNiYXzcOCEv4-YNJ" class="btn btn-light">
-  <i class="fa fa-file"></i> Poster
+  <i class="fas fa-file"></i> Poster
 </a>
 
 <a href="https://github.com/bentyeh/tox21_cs221" class="btn btn-light">
