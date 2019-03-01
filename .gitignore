@@ -1,3 +1,7 @@
 _site/
 .jekyll-metadata
 .DS_Store
+js/bootstrap*
+js/jquery*
+css/bootstrap*
+css/font-awesome*
