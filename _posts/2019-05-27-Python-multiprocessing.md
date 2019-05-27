@@ -152,7 +152,7 @@ usage is sufficient. However, the optimal use of `multiprocessing` pools depends
 1. Python functions that do not call the `fork()` or `exec()` family of system calls. To reduce memory utilization at the expense of speed of launching processes, you can set the process start method to `'spawn'` using `mp.set_start_method('spawn')` at the start of your main Python program.
 2. System commands. If you want to be able to terminate the system commands with `pool.terminate()`, you have to use `os.exec*()` to launch them. However, this precludes getting any return value (not even an exit code) from the pool processes.
 
-To run system commands with the ability to terminate them, check on their status, and retrieve their returned exit codes, you will have to create your own thread/process pool class, either by extending the existing `multiprocessing.pool.Pool` class, or [rolling your own altogether](https://github.com/bentyeh/scripts/blob/5a74eb0b22688d4226b87cf4c196024ef7a1be68/Python/utils.py#L257).
+To run system commands with the ability to terminate them, check on their status, and retrieve their returned exit codes, you will have to create your own thread/process pool class, either by extending the existing `multiprocessing.pool.Pool` class, or [rolling your own altogether](https://github.com/bentyeh/scripts/blob/9174e3a6ec3504c926dad516209e0c26cb4deaef/Python/utils.py#L257).
 
 # Appendix
 
