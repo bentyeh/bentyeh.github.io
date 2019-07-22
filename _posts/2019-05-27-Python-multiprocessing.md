@@ -7,22 +7,6 @@ excerpt: The behavior of Python multiprocessing pools depends on largely on the 
 last_updated: May 27, 2019
 ---
 
-- [Background](#Background)
-  - [Python's `multiprocessing` package](#Pythons-multiprocessing-package)
-  - [Calling system commands in Python](#Calling-system-commands-in-Python)
-  - [Process groups and signals](#Process-groups-and-signals)
-- [Behavior of `multiprocessing.Pool`](#Behavior-of-multiprocessingPool)
-  - [Memory footprint](#Memory-footprint)
-  - [Handling `SIGINT` signals](#Handling-SIGINT-signals)
-  - [`pool.terminate()`](#poolterminate)
-- [Summary](#Summary)
-- [Appendix](#Appendix)
-  - [`multiprocessing.Pool` versus `multiprocessing.pool.Pool`](#multiprocessingPool-versus-multiprocessingpoolPool)
-  - [Life of a pool process](#Life-of-a-pool-process)
-  - [Obtaining process (group) IDs and sending signals](#Obtaining-process-group-IDs-and-sending-signals)
-  - [`multiprocessing.dummy` module](#multiprocessingdummy-module)
-  - [Topics not discussed (may be added later!)](#Topics-not-discussed-may-be-added-later)
-
 # Background
 
 ## Python's `multiprocessing` package
