@@ -2,6 +2,12 @@
 layout: default
 ---
 
+{%- if page.use_toc -%}
+    <span>{{ page.excerpt | markdownify }}</span>
+    <h2>Table of Contents</h2>
+    {% include toc.html html=content %}
+{%- endif -%}
+
 {{ content }}
 
 <i>Last updated: {{ page.last_updated }}</i>
