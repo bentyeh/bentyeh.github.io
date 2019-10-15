@@ -4,7 +4,7 @@ layout: post
 use_code: true
 use_toc: true
 excerpt: The behavior of Python multiprocessing pools depends on largely on the target functions.
-last_updated: May 27, 2019
+last_updated: October 15, 2019
 ---
 
 # Background
@@ -21,7 +21,7 @@ This post refers collectively to binary executables (such as `ls` or `wget`) and
   - [`os.system(<command>)`](https://docs.python.org/3/library/os.html#os.system)
     - Calls the `system()` system call, which according to the [Linux man-pages](http://man7.org/linux/man-pages/man3/system.3.html),
       > uses fork(2) to create a child process that executes the shell command specified in command using execl(3) as follows:
-      >  ```
+      >  ```c
       >  execl("/bin/sh", "sh", "-c", command, (char *) NULL);
       >  ```
       >  `system()` returns after the command has been completed.
@@ -60,13 +60,13 @@ On Unix-based systems, the `multiprocessing` package defaults to the `'fork'` me
 Upon initialization (e.g., in the constructor), a `pool` object creates a pool of processes, each of whose target is the [`mp.pool.worker()`](https://github.com/python/cpython/blob/v3.7.3/Lib/multiprocessing/pool.py#L93) function, which waits until a task (consisting of a function to run and arguments to call it with, such as provided to `pool.apply_async()`) arrives in a task queue. We consider memory footprint with 3 types of task functions:
 
 1. Does not call the `fork()` or `exec()` family of system calls.
-   - Example: `pool.apply_async(time.sleep, (10,))`
+   - Example: `pool.apply_async(time.sleep, (10,))`{:.python}
    - Process hiearchy
      - parent process
        - pool process
    - Memory footprint depends on the process start method (`'fork'` or `'spawn'`).
 2. Uses the `fork()` system call to create a child process to run the actual command.
-   - Example: `pool.apply_async(os.system, ('sleep 10',))`
+   - Example: `pool.apply_async(os.system, ('sleep 10',))`{:.python}
    - Process hiearchy
      - parent process
        - pool process
@@ -74,7 +74,7 @@ Upon initialization (e.g., in the constructor), a `pool` object creates a pool o
            - command process
    - Memory footprint is relatively high and depends in part on the process start method. A Python pool process, and possibly a shell process, is required to run alongside the desired command process.
 3. Uses the `exec()` family of system calls *before/without calling `fork()`* to run the actual command
-   - Example: `pool.apply_async(os.execvp, ('sleep', ('10',)))`
+   - Example: `pool.apply_async(os.execvp, ('sleep', ('10',)))`{:.python}
    - Process hiearchy
      - parent process
        - pool process (whose memory space, originally occupied by a Python process, has been cannibalized to run the command)
@@ -127,7 +127,7 @@ Note that keyboard interrupts (e.g., Ctrl-C) are sent to the entire process grou
 # Summary
 
 In many cases, the standard
-```
+```python
 pool = mp.Pool()
 pool.apply_async(<target_function>)
 ```
@@ -190,7 +190,7 @@ The `multiprocessing.dummy` module has some notable limitations, however.
 - Starting dummy processes with a target of `os.exec*()` will fail with an `OSError` exception: `[Errno 12] Cannot allocate memory`.
 - `multiprocessing.pool.ThreadPool.terminate()` does not terminate workers.
   - Pools created using `multiprocessing.dummy.Pool()` are instances of the `multiprocessing.pool.ThreadPool` class, which inherits the `mulitprocessing.pool.Pool` class and shares the same `terminate()` method, which calls `_terminate()`, which calls `_terminate_pool()`, which includes the [lines](https://github.com/python/cpython/blob/v3.7.3/Lib/multiprocessing/pool.py#L597)
-    ```
+    ```python
     if pool and hasattr(pool[0], 'terminate'):
       util.debug('terminating workers')
       for p in pool:
