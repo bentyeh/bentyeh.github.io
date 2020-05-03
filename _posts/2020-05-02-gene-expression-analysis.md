@@ -16,7 +16,7 @@ $$K \sim \text{NB}(r, p)$$: number of failures until $$r$$ successes have occurr
 
 $$P(K = k) = {k + r - 1 \choose r - 1} p^r (1 - p)^k = {k + r - 1 \choose k} p^r (1 - p)^k$$
 
-#### Derivation
+<details markdown="block"><summary>Derivation</summary>
 
 Assumptions
 1. All trials are independent.
@@ -33,6 +33,8 @@ $$P(B) = p$$
 Since all trials are independent, $$A$$ and $$B$$ are independent events, so
 
 $$P(K = k) = P(A \cap B) = P(A) P(B)$$
+
+</details>
 
 Notes and References
 1. The negative binomial may alternatively be formulated as $$K + r = Y \sim \text{NB}(r, p)$$ = the number of the trial on which the $$r$$th success occurs. See Wackerly's *Mathematical Statistics with Applications*, 7th Edition, or Rice's *Mathematical Statistics and Data Analysis*, 3rd Edition.
@@ -77,7 +79,7 @@ P(K = k \mid \Lambda = \lambda) = \frac{(s\lambda)^k e^{-s\lambda}}{k!}, \quad
 P(\Lambda = \lambda) = \frac{1}{\theta^a \Gamma(a)} \lambda^{a-1} e^{-\frac{\lambda}{\theta}}
 $$
 
-##### Derivation
+<details markdown="block"><summary>Derivation</summary>
 
 $$\begin{aligned}
 P(K = k)
@@ -91,6 +93,8 @@ P(K = k)
 &= \frac{(k + a - 1)!}{k! (a - 1)!} \left(\frac{1}{s\theta + 1} \right)^a \left(\frac{s\theta}{s\theta + 1} \right)^k \\
 &= {k + a - 1 \choose k} \left(\frac{1}{s\theta + 1} \right)^a \left(\frac{s\theta}{s\theta + 1} \right)^k
 \end{aligned}$$
+
+</details>
 
 ## Count data
 
@@ -115,7 +119,15 @@ Negative binomial interpretation
   - We can think of a fixed $$p_i$$ as corresponding to technical replicates: samples are measurements of the same underlying population of $$N$$ transcripts, of which a proportion $$p_i$$ belong to gene $$i$$. Then, there should be no overdispersion, and the counts should follow a Poisson distribution.
   - We can think of a varying $$p_i$$ as corresponding to biological replicates: samples are measurements of different mice, etc., where the proportion of transcripts belonging to gene $$i$$ varies over the population of mice, etc., according to a Gamma distribution. [[Robinson & Oshlack]](#references) [[Bioramble blog]](#references)
 - Direct interpretation: Each read is a trial, and the read (trial) is "successful" if it does *not* come from gene $$i$$. The negative binomial models the number of "failed" reads (reads from gene $$i$$) until $$r$$ "successful" reads (reads not from gene $$i$$) have been observed, given that $$\phi_i = 1 - p_i$$ is the probability of observing a "successful" read. Finally,
-$$\frac{r_i(1 - \phi_i)}{\phi_i} = \frac{r_i}{\phi_i} p_i = \frac{\text{\# of reads not from gene $$i$$}}{\text{proportion of reads not from gene $$i$$}} p_i = (\text{\# total reads}) p_i = np_i$$
+
+  $$
+  \frac{r_i(1 - \phi_i)}{\phi_i}
+  = \frac{r_i}{\phi_i} p_i
+  = \frac{\text{\# of reads not from gene $i$}}{\text{proportion of reads not from gene $i$}} p_i
+  = (\text{\# total reads}) p_i
+  = np_i
+  $$
+
 - Empirical evidence: Empirically, the variability of read counts is larger than the Binomial and Poisson distributions allows and is better approximated by a Negative Binomial distribution. [[DESeq paper]](#references) [[Bioramble blog]](#references)
 
 ## Gene length-dependent models
@@ -133,14 +145,16 @@ Symbols
 |----------------------------------------------------------------|----------------------------------------------------|---------------------------------------------------------|----------------------------| 
 | Acronym                                                        | reads per kilobase per millions of reads mapped    | fragments per kilobase per per millions of reads mapped | transcripts per million    | 
 | Formula                                                        | $$\frac{X_t}{(N / {10}^6)(\tilde{l}_t / {10}^3)}$$ | $$\frac{X_t}{(N / {10}^6)(\tilde{l}_t / {10}^3)}$$      | $$\hat{p}_t \cdot {10}^6$$ | 
-| Comparable across experiments                                  | No                                                 | No                                                      | Yes                        | 
+| Comparable across experiments                                  | Bad                                                | Bad                                                     |      Not great                  | 
 | Value for 1 transcript per sample (i.e., $$p_t = \frac{1}{M}$$) | ~10 [[Pachter's blog post]](#references)            | ~10                                                     | $$\frac{ {10}^6}{M}$$        | 
+
+[]()
 
 For a brief comparison of the three metrics, consider
 1. [Harold Pimentel's blog post](https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/)
 2. [Lior Pachter's 2013 CSHL Keynote](https://youtu.be/5NiFibnbE8o?t=1832)
 
-### Derivation
+<details markdown="block"><summary>Derivation</summary>
 
 Definitions
 - A **transcript** $$t$$ is a unique sequence (strand) of mRNA corresponding to a gene isoform. It is characterized by a length $$l_t$$.
@@ -252,6 +266,8 @@ Formally, consider a set of raw reads $$F'$$. Reads from the same fragment are t
    - RSEM paper; introduces TPM metric.
 9. Pachter, L. Estimating number of transcripts from RNA-Seq measurements (and why I believe in paywall). *Bits of DNA* (2014). https://liorpachter.wordpress.com/2014/04/30/estimating-number-of-transcripts-from-rna-seq-measurements-and-why-i-believe-in-paywall/.
 
+</details>
+
 # Differential expression analysis
 
 ## DESeq / DESeq2
@@ -277,11 +293,13 @@ Count matrix: $$K \in \mathbb{N}^{n \times m}$$
   - Diseased: The patient is diseased (1) or healthy (0).
 
 | sample $$j$$ | intercept | $$x_{1j}$$: drug | $$x_{2j}$$: diseased |
-| ---------- | --------- | -------------- | ------------------ |
-| 1          | 1         | 0              | 0                  |
-| 2          | 1         | 1              | 0                  |
-| 3          | 1         | 0              | 1                  |
-| 4          | 1         | 1              | 1                  |
+| ------------ | --------- | ---------------- | -------------------- |
+| 1            | 1         | 0                | 0                    |
+| 2            | 1         | 1                | 0                    |
+| 3            | 1         | 0                | 1                    |
+| 4            | 1         | 1                | 1                    |
+
+[]()
 
 If the normalized count $$q_{ij}$$ of gene $$i$$ is modeled as
 
@@ -319,15 +337,17 @@ $$\hat{s}_j = \sum_{i=1}^n k_{ij}$$
 
 Problem: This potentially reduces the power of the method to pick out differentially expressed genes, and in extreme cases, might lead to false positives. Consider the following dataset where gene C was knocked-out in sample 3. Using the normalized counts $$q_{ij}$$, one might erroneously conclude that genes A, B, D, and E are upregulated in sample 3 relative to samples 1 and 2.
 
-| gene        | sample 1 | sample 2 | sample 3 | $$q_{i1}$$ | $$q_{i2}$$ | $$q_{i3}$$ | 
-|-------------|----------|----------|----------|----------|----------|----------| 
-| A           | 100      | 90       | 125      | 1/15     | 1/15     | 1.25/15  | 
-| B           | 200      | 180      | 250      | 2/15     | 2/15     | 2.5/15   | 
-| C           | 300      | 270      | 0        | 3/15     | 3/15     | 0        | 
-| D           | 400      | 360      | 500      | 4/15     | 4/15     | 5/15     | 
-| E           | 500      | 450      | 625      | 5/15     | 5/15     | 6.25/15  | 
-| Total       | 1500     | 1350     | 1500     |          |          |          |
-| $$\hat{s}_j$$ | 1500     | 1350     | 1500     |          |          |          |
+| gene          | sample 1 | sample 2 | sample 3 | $$q_{i1}$$ | $$q_{i2}$$ | $$q_{i3}$$ | 
+|---------------|----------|----------|----------|------------|------------|------------| 
+| A             | 100      | 90       | 125      | 1/15       | 1/15       | 1.25/15    | 
+| B             | 200      | 180      | 250      | 2/15       | 2/15       | 2.5/15     | 
+| C             | 300      | 270      | 0        | 3/15       | 3/15       | 0          | 
+| D             | 400      | 360      | 500      | 4/15       | 4/15       | 5/15       | 
+| E             | 500      | 450      | 625      | 5/15       | 5/15       | 6.25/15    | 
+| Total         | 1500     | 1350     | 1500     |            |            |            |
+| $$\hat{s}_j$$ | 1500     | 1350     | 1500     |            |            |            |
+
+[]()
 
 #### Median-of-ratios
 
@@ -347,6 +367,8 @@ Using the same example, the normalized counts of genes A, B, D, and E are the sa
 | Total       | 1500     | 1350     | 1500     |         |                        |                        |                        | 1560.06   | 1560.06   | 1248.05   | 
 | $$\hat{s}_j$$ |          |          |          |         | 0.96                   | 0.87                   | 1.20                   |           |           |           | 
 
+[]()
+
 ### Model
 
 Generalized linear model (GLM) with logarithmic link
@@ -359,12 +381,12 @@ K_{ij} &\sim \text{NB}(\mu_{ij}, \alpha_i) \\
 
 Hierarchical construction of negative binomial
 - $$R_{ij} \sim \text{Gamma}(a_{ij} = \frac{q_{ij}^2}{v_{ij}}, \theta_{ij} = \frac{v_{ij}}{q_{ij}})$$: normalized count of transcripts from sample $$j$$ belonging to gene $$i$$; the distribution is over biological replicates from experimental condition $$\rho(j)$$ 
-  - $$\mathbb{E}(R_{ij}) = a_{ij} \theta_{ij} = q_{ij}$$
-  - $$\text{Var}(R_{ij}) = a_{ij} \theta_{ij}^2 = v_{ij}$$
-- $$K_{ij} \mid R_{ij} \sim \text{Poi}(s_j R_{ij}) \rightarrow K_{ij} \sim \text{NB}(\mu_{ij}, \alpha_i)$$
+  - []()$$\mathbb{E}(R_{ij}) = a_{ij} \theta_{ij} = q_{ij}$$ <!-- The empty links []() are necessary for the math to be rendered in-line, since there is no text on the line. -->
+  - []()$$\text{Var}(R_{ij}) = a_{ij} \theta_{ij}^2 = v_{ij}$$
+- []()$$K_{ij} \mid R_{ij} \sim \text{Poi}(s_j R_{ij}) \rightarrow K_{ij} \sim \text{NB}(\mu_{ij}, \alpha_i)$$
   - $$\mu_{ij} = \mathbb{E}(K_{ij}) = a_{ij} s_j \theta_{ij} = s_j q_{ij}$$ [[Eq. (2), DESeq paper]](#references-1)
   - $$\sigma^2_{ij} = \text{Var}(K_{ij}) = a_{ij} s_j \theta_{ij} + a_{ij} s_j^2 \theta_{ij}^2 = s_j q_{ij} + s_j^2 v_{ij}$$ [[Eq. (3), DESeq paper]](#references-1)
-  - $$\alpha_i = \frac{1}{a_{ij}} = \frac{v_{ij}}{q_{ij}^2}$$
+  - []()$$\alpha_i = \frac{1}{a_{ij}} = \frac{v_{ij}}{q_{ij}^2}$$
 
 Parameters (in order of estimation) [[DESeq2 vignette]](#references-1)
 - $$s_{ij}$$: gene- and sample-specific normalization factor
