@@ -19,6 +19,10 @@ layout: compress
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
   {% endif %}
 
+  {% if page.use_academicons %}
+    <link rel="stylesheet" href="https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css">
+  {% endif %}
+
   {% if page.use_code %}
     <link rel="stylesheet" href="{{ site.baseurl }}/css/rouge-github.css">
   {% endif %}

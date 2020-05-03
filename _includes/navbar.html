@@ -1,7 +1,7 @@
 {% assign default_paths = site.pages | map: "path" %}
 {% assign page_paths = site.header_pages | default: default_paths %}
 
-<div class="container">
+<div class="container" style="border-bottom: 1px solid #e8e8e8">
   <nav class="navbar navbar-expand-md navbar-light bg-white">
     <a class="navbar-brand" href="{{ "/" | relative_url }}">{{ site.title | escape }}</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

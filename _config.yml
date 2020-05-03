@@ -3,6 +3,12 @@ description: Stanford BS 2019, MS 2020
 
 highlighter: rouge
 
+##### SOCIAL INTEGRATION #####
+github_username: bentyeh
+linkedin_username: bentyeh
+scholar_userid: kHslwRwAAAAJ
+orcid_id: 0000-0001-9397-6392
+
 ##### BUILD SETTINGS #####
 incremental: true
 
