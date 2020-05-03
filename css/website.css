@@ -93,6 +93,25 @@ img {
 /*******************
  * HOME
  ******************/
+.home-title {
+  margin-top: 1em;
+}
+
+.home-description {
+  color: darkgray;
+}
+
+.intro {
+  margin-top: 2em;
+  margin-bottom: 2em;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.intro-text {
+  font-size: 1.2rem;
+  margin-bottom: 1em;
+}
+
 .post-list {
   margin-left: 0;
   list-style: none;
@@ -105,6 +124,19 @@ img {
 .post-meta {
   font-size: 0.8rem;
   color: grey;
+}
+
+/*******************
+* SOCIAL
+ ******************/
+.social {
+  padding-top: 20px;
+}
+
+.contacticon {
+  display: block;
+  font-size: 30px;
+  margin: 5px;
 }
 
 /*******************

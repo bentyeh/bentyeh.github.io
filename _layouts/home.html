@@ -2,12 +2,22 @@
 layout: default
 ---
 
-{{ content }}
+<div class="container intro">
+  <div class="row">
+    <div class="col-lg-9 intro-text">
+      {{ content }}
+    </div>
+    <div class="col-lg-3">
+      <img class="rounded" src="{{ site.baseurl }}/images/bentyeh_700px_square.jpg">
+      {% include social.html %}
+    </div>
+  </div>
+</div>
 
 <h2>Latest Posts</h2>
 
 <ul class="post-list">
-{% for post in site.posts limit:10 %}
+{% for post in site.posts limit:5 %}
   <li>
 
     {% assign date_format = site.cayman-blog.date_format | default: "%b %-d, %Y" %}
