@@ -29,6 +29,9 @@ img {
  * NAVBAR
  *  todo: add colors
  ******************/
+.navbar-custom {
+  border-bottom: 1px solid #e8e8e8;
+}
 
 /*******************
  * HEADERS - DONE
