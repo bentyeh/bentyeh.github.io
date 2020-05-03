@@ -3,11 +3,5 @@ title: About
 layout: default
 ---
 
-<div class="row content-row">
-<div class="col-12 col-sm-4">
-    <img src="{{ site.baseurl }}/images/bio.jpg">
-</div>
-<div class="col-12 col-sm-8">
-    <p>Coming soon...</p>
-</div>
-</div>
+<iframe src="https://drive.google.com/file/d/0B4LQn_cjTzUpdXZEQ0lwSHhUYms/preview" style="width:100%; height:600px;" frameborder="0">
+</iframe>
