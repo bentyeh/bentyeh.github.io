@@ -71,7 +71,7 @@ Now, we can equivalently parameterize the negative binomial distribution as foll
 Idea: $$K$$ is a Poisson distribution where the mean of the Poisson distribution is proportional to a Gamma-distributed random variable.
 
 $$K \sim \text{NB}(r, p)$$ is equivalent to $$K \mid \Lambda = \lambda \sim \text{Poi}(s\lambda)$$ where $$\Lambda \sim \text{Gamma}(a = r, \theta = \frac{1-p}{sp})$$
-- $$p = \frac{1}{s\theta + 1}$$
+- []()$$p = \frac{1}{s\theta + 1}$$
 - The $$a$$ parameter in the Gamma distribution is *not* the same as the $$\alpha$$ dispersion parameter.
 
 $$
@@ -123,8 +123,8 @@ Negative binomial interpretation
   $$
   \frac{r_i(1 - \phi_i)}{\phi_i}
   = \frac{r_i}{\phi_i} p_i
-  = \frac{\text{\# of reads not from gene $i$}}{\text{proportion of reads not from gene $i$}} p_i
-  = (\text{\# total reads}) p_i
+  = \frac{\text{# of reads not from gene $i$}}{\text{proportion of reads not from gene $i$}} p_i
+  = (\text{# total reads}) p_i
   = np_i
   $$
 
@@ -171,7 +171,7 @@ Model (from [[Pachter's arXiv article]](#references))
   - $$m$$: fixed length of all reads
 - $$\tilde{l}_t = l_t - m + 1$$: effective length of a transcript $$t \in T$$, i.e., the number of positions in a transcript in which a read of length $$m$$ can start
 - $$p_t$$: relative abundance of transcript $$t$$, i.e., the proportion of all mRNA molecules corresponding to transcript $$t$$
-  - $$\sum_{t \in T} p_t = 1$$
+  - []()$$\sum_{t \in T} p_t = 1$$
 - $$\alpha_t = P(f \in_\text{map} t)$$: probability of selecting a read from transcript $$t$$
 
 We model the observation of a particular read $$f$$ that maps to some position $$\gamma$$ in transcript $$t$$ as a generative sequence of probabilistic events:
@@ -180,7 +180,7 @@ We model the observation of a particular read $$f$$ that maps to some position $
    $$P(f \in_\text{map} t) = \alpha_t = \frac{p_t \tilde{l}_t}{\sum_{r \in T} p_r \tilde{l}_r}$$
 
    Observe that
-   - $$\sum_{t \in T} \alpha_t = 1$$
+   - []()$$\sum_{t \in T} \alpha_t = 1$$
    - $$\alpha_t \neq p_t$$ because $$\alpha_t$$ accounts for transcript lengths.
    - $$p_t$$ can be expressed in terms of $$\alpha$$ (see [[Pachter's arXiv article]](#references)): $$p_t = \frac{\alpha_t / \tilde{l}_t}{\sum_{r \in T} \alpha_r / \tilde{l}_r}$$
 2. Choose a position uniformly at random from among $$\tilde{l}_t = l_t - m + 1$$ possible positions to begin the read
@@ -254,7 +254,8 @@ Formally, consider a set of raw reads $$F'$$. Reads from the same fragment are t
 
 </details>
 
-<a name="references"></a><details markdown="block"><summary>References</summary>
+<a name="references"></a>
+<details markdown="block"><summary>References</summary>
 
 1. Robinson, M. D. & Oshlack, A. A scaling normalization method for differential expression analysis of RNA-seq data. *Genome Biol* 11, R25 (2010). https://doi.org/10.1186/gb-2010-11-3-r25.
 2. Lipp, J. Why sequencing data is modeled as negative binomial. *Bioramble* (2016). https://bioramble.wordpress.com/2016/01/30/why-sequencing-data-is-modeled-as-negative-binomial/.
