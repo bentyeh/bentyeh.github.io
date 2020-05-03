@@ -10,4 +10,9 @@ layout: default
 
 {{ content }}
 
-<i>Last updated: {{ page.last_updated }}</i>
+{% assign date_format = site.cayman-blog.date_format | default: "%b %-d, %Y" %}
+{%- if page.last_updated -%}
+    <i>Posted: {{ page.date | date: date_format }}. Last updated: {{ page.last_updated }}.</i>
+{%- else -%}
+    <i>Posted: {{ page.date | date: date_format }}.</i>
+{%- endif -%}

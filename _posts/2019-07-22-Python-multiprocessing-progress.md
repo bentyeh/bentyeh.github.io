@@ -4,7 +4,6 @@ layout: post
 use_code: true
 use_toc: true
 excerpt: Use `tqdm` or roll your own code snippets to quickly check the progress of your Python multiprocessing pools!
-last_updated: July 22, 2019
 ---
 
 Process pools, such as those afforded by Python's [`multiprocessing.Pool`](https://docs.python.org/3/library/multiprocessing.html#multiprocessing.pool.Pool) class, are often used to parallelize loops or map a function over an iterable. It can be helpful sometimes to monitor the progress over the loop or iterable, and we demonstrate below several ways to do so.
