@@ -50,8 +50,13 @@ img {
   background: url("../images/banner_home.jpg") center center/cover;
 }
 
+.page-title {
+  margin-top: 1em;
+}
+
 .page-description {
   padding-top: 0.25em;
+  color: darkgray;
 }
 
 #profile-pic {
@@ -93,14 +98,6 @@ img {
 /*******************
  * HOME
  ******************/
-.home-title {
-  margin-top: 1em;
-}
-
-.home-description {
-  color: darkgray;
-}
-
 .intro {
   margin-top: 2em;
   margin-bottom: 2em;
