@@ -4,7 +4,7 @@ layout: post
 use_code: true
 use_toc: true
 excerpt: The behavior of Python multiprocessing pools depends on largely on the target functions.
-last_updated: October 15, 2019
+last_updated: 2019-10-15
 ---
 
 # Background
