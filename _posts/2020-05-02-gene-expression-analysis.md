@@ -252,7 +252,10 @@ FPKM is a generalization of RPKM where a single fragment might yield multiple re
 
 Formally, consider a set of raw reads $$F'$$. Reads from the same fragment are treated as a single processed read to generate the set of processed reads $$F$$. With this pre-processing step, the formula for FPKM is identical to that of RPKM.
 
-## References
+</details>
+
+<a name="references"></a><details markdown="block"><summary>References</summary>
+
 1. Robinson, M. D. & Oshlack, A. A scaling normalization method for differential expression analysis of RNA-seq data. *Genome Biol* 11, R25 (2010). https://doi.org/10.1186/gb-2010-11-3-r25.
 2. Lipp, J. Why sequencing data is modeled as negative binomial. *Bioramble* (2016). https://bioramble.wordpress.com/2016/01/30/why-sequencing-data-is-modeled-as-negative-binomial/.
 3. Anders, S. & Huber, W. Differential expression analysis for sequence count data. *Genome Biol* 11, R106 (2010). https://doi.org/10.1186/gb-2010-11-10-r106.
@@ -405,7 +408,8 @@ Parameters (in order of estimation) [[DESeq2 vignette]](#references-1)
 
 When sample sizes are small, dispersion estimates $$\alpha_i$$ are highly variable (noisy). DESeq2 addresses this problem by assuming that "genes of similar average expression strength have similar dispersion." The counts $$K_{ij}$$ are first fit to the negative binomial model (as a generalized linear model) using MLE. Next, DESeq2 fits a smooth curve regressing the MLE dispersion estimate against the mean of normalized counts. Finally, the MLE estimates are shrunk towards the smooth curve by treating the smooth curve as a prior and generating MAP estimates of the dispersion values. [[DESeq2 paper]](#references-1)
 
-### References
+<a name="references-1"></a><details markdown="block"><summary>References</summary>
+
 1. Anders, S. & Huber, W. Differential expression analysis for sequence count data. *Genome Biol* 11, R106 (2010). https://doi.org/10.1186/gb-2010-11-10-r106.
    - DESeq paper.
 2. Love, M. I., Huber, W. & Anders, S. Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. *Genome Biol* 15, 550 (2014). https://doi.org/10.1186/s13059-014-0550-8.
@@ -415,6 +419,8 @@ When sample sizes are small, dispersion estimates $$\alpha_i$$ are highly variab
    - [Chapter 8](https://web.stanford.edu/class/bios221/book/Chap-CountData.html) describes the DESeq2 model.
 4. Love, M. I., Anders, S. & Huber, W. Analyzing RNA-seq data with DESeq2. https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html (2020).
    - DESeq2 vignette.
+
+</details>
 
 # Pathway analysis
 
