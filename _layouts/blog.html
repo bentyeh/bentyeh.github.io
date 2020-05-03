@@ -4,10 +4,8 @@ layout: default
 
 {{ content }}
 
-<h2>Latest Posts</h2>
-
 <ul class="post-list">
-{% for post in site.posts limit:10 %}
+{% for post in site.posts %}
   <li>
 
     {% assign date_format = site.cayman-blog.date_format | default: "%b %-d, %Y" %}
