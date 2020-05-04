@@ -306,9 +306,11 @@ hr {
   display: block;
   margin-top: 0.3rem;
   color: #77757a;
+  padding: 0;
 }
 
-.toc-nav li a:hover {
+.toc-nav li a:hover,
+.toc-nav li a.active {
   color: #007bff;
   text-decoration: none;
 }
