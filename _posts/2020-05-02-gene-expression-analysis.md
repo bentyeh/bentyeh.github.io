@@ -39,7 +39,7 @@ $$P(K = k) = P(A \cap B) = P(A) P(B)$$
 Notes and References
 1. The negative binomial may alternatively be formulated as $$K + r = Y \sim \text{NB}(r, p)$$ = the number of the trial on which the $$r$$th success occurs. See Wackerly's *Mathematical Statistics with Applications*, 7th Edition, or Rice's *Mathematical Statistics and Data Analysis*, 3rd Edition.
 2. [Wikipedia](https://en.wikipedia.org/wiki/Negative_binomial_distribution) uses "success" and "failure" oppositely of the formulation presented here. Swap $$p$$ and $$1 - p$$ for the equations to match.
-3. For a reference that matches the formulation used here, see https://www.johndcook.com/negative_binomial.pdf.
+3. For a reference that matches the formulation used here, see [https://www.johndcook.com/negative_binomial.pdf](https://www.johndcook.com/negative_binomial.pdf).
 
 #### Properties
 
@@ -257,18 +257,18 @@ Formally, consider a set of raw reads $$F'$$. Reads from the same fragment are t
 <a name="references"></a>
 <details markdown="block"><summary>References</summary>
 
-1. Robinson, M. D. & Oshlack, A. A scaling normalization method for differential expression analysis of RNA-seq data. *Genome Biol* 11, R25 (2010). https://doi.org/10.1186/gb-2010-11-3-r25.
-2. Lipp, J. Why sequencing data is modeled as negative binomial. *Bioramble* (2016). https://bioramble.wordpress.com/2016/01/30/why-sequencing-data-is-modeled-as-negative-binomial/.
-3. Anders, S. & Huber, W. Differential expression analysis for sequence count data. *Genome Biol* 11, R106 (2010). https://doi.org/10.1186/gb-2010-11-10-r106.
+1. Robinson, M. D. & Oshlack, A. A scaling normalization method for differential expression analysis of RNA-seq data. *Genome Biol* 11, R25 (2010). [https://doi.org/10.1186/gb-2010-11-3-r25](https://doi.org/10.1186/gb-2010-11-3-r25).
+2. Lipp, J. Why sequencing data is modeled as negative binomial. *Bioramble* (2016). [https://bioramble.wordpress.com/2016/01/30/why-sequencing-data-is-modeled-as-negative-binomial/](https://bioramble.wordpress.com/2016/01/30/why-sequencing-data-is-modeled-as-negative-binomial/).
+3. Anders, S. & Huber, W. Differential expression analysis for sequence count data. *Genome Biol* 11, R106 (2010). [https://doi.org/10.1186/gb-2010-11-10-r106](https://doi.org/10.1186/gb-2010-11-10-r106).
    - DESeq paper.
-4. Pachter, L. Models for transcript quantification from RNA-Seq. *arXiv*:1104.3889 [q-bio, stat] (2011). http://arxiv.org/abs/1104.3889.
-5. Mortazavi, A., Williams, B. A., McCue, K., Schaeffer, L. & Wold, B. Mapping and quantifying mammalian transcriptomes by RNA-Seq. *Nature Methods* 5, 621–628 (2008). https://doi.org/10.1038/nmeth.1226.
+4. Pachter, L. Models for transcript quantification from RNA-Seq. *arXiv*:1104.3889 [q-bio, stat] (2011). [http://arxiv.org/abs/1104.3889](http://arxiv.org/abs/1104.3889).
+5. Mortazavi, A., Williams, B. A., McCue, K., Schaeffer, L. & Wold, B. Mapping and quantifying mammalian transcriptomes by RNA-Seq. *Nature Methods* 5, 621–628 (2008). [https://doi.org/10.1038/nmeth.1226](https://doi.org/10.1038/nmeth.1226).
    - One of the original\* RNA-seq papers; introduces RPKM metric. \*See [Wikipedia](https://en.wikipedia.org/wiki/RNA-Seq#History), [Lior Pachter's \*Seq chronology](https://liorpachter.wordpress.com/seq/), and [this blog post](http://nextgenseek.com/2014/03/the-first-published-paper-on-rna-seq-setting-the-record-straight/).
-7. Trapnell, C. et al. Transcript assembly and quantification by RNA-Seq reveals unannotated transcripts and isoform switching during cell differentiation. *Nature Biotechnology* 28, 511–515 (2010). https://doi.org/10.1038/nbt.1621.
+7. Trapnell, C. et al. Transcript assembly and quantification by RNA-Seq reveals unannotated transcripts and isoform switching during cell differentiation. *Nature Biotechnology* 28, 511–515 (2010). [https://doi.org/10.1038/nbt.1621](https://doi.org/10.1038/nbt.1621).
    - Cufflinks paper; introduces FPKM metric.
-8. Li, B. & Dewey, C. N. RSEM: accurate transcript quantification from RNA-Seq data with or without a reference genome. *BMC Bioinformatics* 12, 323 (2011). https://doi.org/10.1186/1471-2105-12-323.
+8. Li, B. & Dewey, C. N. RSEM: accurate transcript quantification from RNA-Seq data with or without a reference genome. *BMC Bioinformatics* 12, 323 (2011). [https://doi.org/10.1186/1471-2105-12-323](https://doi.org/10.1186/1471-2105-12-323).
    - RSEM paper; introduces TPM metric.
-9. Pachter, L. Estimating number of transcripts from RNA-Seq measurements (and why I believe in paywall). *Bits of DNA* (2014). https://liorpachter.wordpress.com/2014/04/30/estimating-number-of-transcripts-from-rna-seq-measurements-and-why-i-believe-in-paywall/.
+9. Pachter, L. Estimating number of transcripts from RNA-Seq measurements (and why I believe in paywall). *Bits of DNA* (2014). [https://liorpachter.wordpress.com/2014/04/30/estimating-number-of-transcripts-from-rna-seq-measurements-and-why-i-believe-in-paywall/](https://liorpachter.wordpress.com/2014/04/30/estimating-number-of-transcripts-from-rna-seq-measurements-and-why-i-believe-in-paywall/).
 
 </details>
 
@@ -412,14 +412,14 @@ When sample sizes are small, dispersion estimates $$\alpha_i$$ are highly variab
 <a name="references-1"></a>
 <details markdown="block"><summary>References</summary>
 
-1. Anders, S. & Huber, W. Differential expression analysis for sequence count data. *Genome Biol* 11, R106 (2010). https://doi.org/10.1186/gb-2010-11-10-r106.
+1. Anders, S. & Huber, W. Differential expression analysis for sequence count data. *Genome Biol* 11, R106 (2010). [https://doi.org/10.1186/gb-2010-11-10-r106](https://doi.org/10.1186/gb-2010-11-10-r106).
    - DESeq paper.
-2. Love, M. I., Huber, W. & Anders, S. Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. *Genome Biol* 15, 550 (2014). https://doi.org/10.1186/s13059-014-0550-8.
+2. Love, M. I., Huber, W. & Anders, S. Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. *Genome Biol* 15, 550 (2014). [https://doi.org/10.1186/s13059-014-0550-8](https://doi.org/10.1186/s13059-014-0550-8).
    - DESeq2 paper.
-3. Holmes, S. & Huber, W. *Modern Statistics for Modern Biology*. (Cambridge University Press, 2018). https://web.stanford.edu/class/bios221/book/index.html.
+3. Holmes, S. & Huber, W. *Modern Statistics for Modern Biology*. (Cambridge University Press, 2018). [https://web.stanford.edu/class/bios221/book/index.html](https://web.stanford.edu/class/bios221/book/index.html).
    - [Chapter 4](https://web.stanford.edu/class/bios221/book/Chap-Mixtures.html) derives the negative binomial model as a hierarchical Gamma-Poisson model.
    - [Chapter 8](https://web.stanford.edu/class/bios221/book/Chap-CountData.html) describes the DESeq2 model.
-4. Love, M. I., Anders, S. & Huber, W. Analyzing RNA-seq data with DESeq2. https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html (2020).
+4. Love, M. I., Anders, S. & Huber, W. Analyzing RNA-seq data with DESeq2. [https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html) (2020).
    - DESeq2 vignette.
 
 </details>
