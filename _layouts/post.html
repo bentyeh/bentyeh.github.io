@@ -1,13 +1,25 @@
 ---
 layout: default
+use_simplebar: true
 ---
 
 {%- if page.use_toc -%}
-    <h2>Contents</h2>
-    {% include toc.html html=content %}
+    <div class="row">
+        <div class="col-xl-9">
+            <h2>Contents</h2>
+            {% include toc.html html=content %}
+            {{ content }}
+        </div>
+
+        <nav class="d-none d-xl-block col-xl-3 bd-toc">
+            <h5 class="toc-title">Contents</h5>
+            {% include toc.html html=content class="section-nav" %}
+        </nav>
+    </div>
+{%- else -%}
+    {{ content }}
 {%- endif -%}
 
-{{ content }}
 
 {% assign date_format = site.cayman-blog.date_format | default: "%b %-d, %Y" %}
 {%- if page.last_updated -%}

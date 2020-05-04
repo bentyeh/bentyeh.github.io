@@ -109,7 +109,7 @@ img {
 
 .intro-text {
   font-size: 1.2rem;
-  margin-bottom: 1em;
+  padding-bottom: 1em;
 }
 
 .post-list {
@@ -322,4 +322,46 @@ hr {
   text-align: center;
   vertical-align: middle;
   font-size: 12px;
+}
+
+/* ###### TOC ################## */
+
+.bd-toc { /* <nav> */
+  position: sticky;
+  top: 0;
+  height: min-content;
+  max-height: 100vh;
+  overflow-y: auto;
+  padding-top: 1.5rem;
+  font-size: .875rem;
+  border-left: 1px solid #eee;
+}
+
+.toc-title {
+  padding-left: 1rem;
+}
+
+.section-nav {  /* <ul> */
+  padding-left: 0;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.section-nav ul {
+  padding-left: 1rem;  /* indent each level by an additional 1rem */
+}
+
+.bd-toc li {  /* <li> */
+  display: block;
+}
+
+.bd-toc li a {
+  display: block;
+  padding: .125rem 1rem;
+  color: #77757a;
+}
+
+.bd-toc li a:hover {
+  color: #007bff;
+  text-decoration: none;
 }
