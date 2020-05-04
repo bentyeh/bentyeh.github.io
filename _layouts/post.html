@@ -3,8 +3,7 @@ layout: default
 ---
 
 {%- if page.use_toc -%}
-    <span>{{ page.excerpt | markdownify }}</span>
-    <h2>Table of Contents</h2>
+    <h2>Contents</h2>
     {% include toc.html html=content %}
 {%- endif -%}
 
