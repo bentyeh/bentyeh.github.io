@@ -1,16 +1,18 @@
-{% if page.layout == 'home' %}
+{%- if page.layout == 'home' -%}
 
-<div class="container">
   <h1 class="page-title">{{ site.title }}</h1>
-  <h5 class="page-description">{{ page.description }}</h5>
-</div>
+  {%- if page.description -%}
+    <h5 class="page-description">{{ page.description }}</h5>
+  {%- endif -%}
 
-{% elsif page.title %}
+{%- elsif page.title -%}
 
-<div class="container">
   <h1 class="page-title">{{ page.title }}</h1>
-  <h5 class="page-description">{{ page.description }}</h5>
-  <p>{{ page.excerpt | markdownify }}</p>
-</div>
+  {%- if page.description -%}
+    <h5 class="page-description">{{ page.description }}</h5>
+  {%- endif -%}
+  {%- if page.excerpt -%}
+    <p>{{ page.excerpt | markdownify }}</p>
+  {%- endif -%}
 
-{% endif %}
+{%- endif -%}
