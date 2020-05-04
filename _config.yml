@@ -3,6 +3,12 @@ description: Stanford BS 2019, MS 2020
 
 highlighter: rouge
 
+##### COLLECTIONS #####
+collections:
+  projects:
+    output: true
+    permalink: /projects/:path/
+
 ##### SOCIAL INTEGRATION #####
 github_username: bentyeh
 linkedin_username: bentyeh

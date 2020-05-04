@@ -155,6 +155,10 @@ img {
   margin-bottom: 0.5em;
 }
 
+.thumbnail {
+  width: 100%;
+}
+
 /*******************
  * GENERAL
  ******************/
@@ -309,4 +313,13 @@ hr {
   margin: 1rem 0;
   background-color: #eff0f1;
   border: 0;
+}
+
+/* Taken from al-folio theme */
+.caption {
+  height: 100%;
+  color: #aaa;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 12px;
 }
