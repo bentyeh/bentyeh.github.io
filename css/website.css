@@ -36,23 +36,6 @@ img {
 /*******************
  * HEADERS - DONE
  ******************/
-.header {
-  color: white;
-  font-weight: bold;
-  text-align: center;
-  text-shadow: 0 0 1.5em black;
-}
-
-.header-page {
-  background-color: #159957; /* VAR: $header-bg-color */
-  background-image: linear-gradient(120deg, #155799, #159957); /* VARS: $header-bg-color, $header-bg-color-secondar */
-  padding: 1.25em 0; /* padding for top and bottom only */
-}
-
-.header-home {
-  background: url("../images/banner_home.jpg") center center/cover;
-}
-
 .page-title {
   margin-top: 1em;
 }
@@ -60,35 +43,6 @@ img {
 .page-description {
   padding-top: 0.25em;
   color: darkgray;
-}
-
-#profile-pic {
-  width: 90%;
-  max-width: 250px;
-  border-radius: 50%;
-  border: 8px solid white;
-  box-shadow: 0 0 1.5em black;
-}
-
-.contact li {
-  margin-top: 1em;
-}
-
-.contact a,
-.contact a:visited,
-.contact a:focus {
-  color: white !important;
-  border: 3px solid white;
-  margin: 0 10px 0;
-  box-shadow: 0 0 1.5em black;
-  background-color: rgba(128, 128, 128, 0.4);
-}
-
-.contact a:hover,
-.contact a:active {
-  border-color: black !important;
-  background-color: black !important;
-  outline: 0;
 }
 
 /*******************
@@ -126,6 +80,10 @@ img {
   color: grey;
 }
 
+#profile-pic {
+  box-shadow: 0 0 0.5em lightgray;
+}
+
 /*******************
 * SOCIAL
  ******************/
@@ -144,10 +102,6 @@ img {
  ******************/
 .content-row img {
   height: auto;
-}
-
-.content-row .image-wrapper {
-  text-align: center;
 }
 
 .content-row div a.btn {
@@ -323,44 +277,38 @@ hr {
   font-size: 12px;
 }
 
-/* ###### TOC ################## */
+/*******************
+ * Floating Table of Contents for Posts
+ ******************/
 
-.bd-toc { /* <nav> */
+.toc-nav {
   position: sticky;
   top: 0;
   height: min-content;
   max-height: 100vh;
   overflow-y: auto;
-  padding-top: 1.5rem;
-  font-size: .875rem;
   border-left: 1px solid #eee;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
-.toc-title {
+.toc-nav-title {
   padding-left: 1rem;
 }
 
-.section-nav {  /* <ul> */
-  padding-left: 0;
-  padding-bottom: 0;
-  margin-bottom: 0;
+.toc-nav ul {
+  margin: 0;
+  padding-left: 1rem; /* indent each level by an additional 1rem */
+  list-style-type: none;
 }
 
-.section-nav ul {
-  padding-left: 1rem;  /* indent each level by an additional 1rem */
-}
-
-.bd-toc li {  /* <li> */
+.toc-nav li a {
   display: block;
-}
-
-.bd-toc li a {
-  display: block;
-  padding: .125rem 1rem;
+  margin-top: 0.3rem;
   color: #77757a;
 }
 
-.bd-toc li a:hover {
+.toc-nav li a:hover {
   color: #007bff;
   text-decoration: none;
 }

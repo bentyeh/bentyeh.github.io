@@ -10,9 +10,9 @@ layout: default
             {{ content }}
         </div>
 
-        <nav class="d-none d-xl-block col-xl-3 bd-toc">
-            <h5 class="toc-title">Contents</h5>
-            {% include toc.html html=content class="section-nav" %}
+        <nav class="d-none d-xl-block col-xl-3 toc-nav">
+            <h5 class="toc-nav-title">Contents</h5>
+            {% include toc.html html=content %}
         </nav>
     </div>
 {%- else -%}
