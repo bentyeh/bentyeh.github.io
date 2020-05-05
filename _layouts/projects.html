@@ -32,9 +32,9 @@ layout: default
               <a class="post-link" href="{{ project.url | relative_url }}" title="{{ project.title }}">{{ project.title | escape | markdownify }}</a>
             {%- endif -%}
           </h2>
-          
+
           {%- if project.setting -%}
-            <p><span class="italic">{{ project.setting }}</span></p>
+            <p><i>{{ project.setting }}</i></p>
           {%- endif -%}
 
           {%- if project.team -%}
