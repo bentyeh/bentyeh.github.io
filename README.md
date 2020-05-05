@@ -12,11 +12,10 @@ Options
 # Layouts hierarchy
 
 - compress.html: Jekyll layout that compresses HTML (credits: https://github.com/penibelst/jekyll-compress-html)
-  - default.html
-    - home.html
-    - post.html
-    - blog.html
-    - projects.html
+  - default.html: used by about and projects pages
+    - home.html: used by index page
+    - post.html: used by blog posts and individual projects
+    - blog.html: used by blog page
 
 # Frontmatter variables
 
