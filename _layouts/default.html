@@ -56,14 +56,12 @@ layout: compress
   {% include analytics.html %}
 </head>
 
-<body data-spy="scroll" data-target="#{{ layout.toc_nav_id }}" style="position: relative">
+<body data-spy="scroll" data-target="#{{ layout.toc_nav_id }}">
   {% include navbar.html %}
 
   <div class="container">
     {% include header.html %}
-    <section class="main-content">
-      {{ content }}
-    </section>
+    {{ content }}
 
     {% include footer.html %}
   </div>
