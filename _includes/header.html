@@ -1,9 +1,7 @@
 {%- if page.layout == 'home' -%}
 
   <h1 class="page-title">{{ site.title }}</h1>
-  {%- if page.description -%}
-    <h5 class="page-description">{{ page.description }}</h5>
-  {%- endif -%}
+  <h5 class="page-description">{{ page.description | default: site.description }}</h5>
 
 {%- elsif page.title -%}
 
