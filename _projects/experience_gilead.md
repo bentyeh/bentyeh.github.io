@@ -1,5 +1,5 @@
 ---
-layout: projects
+layout: post
 category: experience
 title: Gilead Research Bioinformatics Intern
 mentors: Dr. David Lopez
