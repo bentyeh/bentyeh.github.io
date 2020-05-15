@@ -10,7 +10,7 @@
     <h5 class="page-description">{{ page.description }}</h5>
   {%- endif -%}
   {%- if page.excerpt -%}
-    <p>{{ page.excerpt | markdownify }}</p>
+    {{ page.excerpt | markdownify }}
   {%- endif -%}
 
 {%- endif -%}
