@@ -39,6 +39,7 @@ Variable            | Description
 ------------------- | -----------
 `last_updated`      | date in `YYYY-MM-DD` format
 `excerpt`           | text to show on blog / project list and at top of post / project
+`hidden`            | boolean, set to `true` to keep the post / project "unlisted" (only accessible by direct URL)
 
 ### Project-specific
 

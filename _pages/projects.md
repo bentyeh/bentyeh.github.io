@@ -13,9 +13,8 @@ categories:
   <h1 class="section-title">{{ category | capitalize }}</h1>
   <ul class="post-list">
   {%- for project in site.projects -%}
-    {%- if project.category != category -%}
-      {% continue %}
-    {%- endif -%}
+    {%- if project.category != category -%}{% continue %}{%- endif -%}
+    {%- if project.hidden -%}{%- continue -%}{%- endif -%}
     <li>
 
       <div class="row content-row">
