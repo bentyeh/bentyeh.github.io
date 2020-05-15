@@ -20,10 +20,8 @@ toc_nav_id: toc-nav
     {{ content }}
 {%- endif -%}
 
-
-{% assign date_format = site.cayman-blog.date_format | default: "%b %-d, %Y" %}
 {%- if page.last_updated -%}
-    <i>Posted: {{ page.date | date: date_format }}. Last updated: {{ page.last_updated }}.</i>
+    <i>Posted: {{ page.date | date: site.date_format }}. Last updated: {{ page.last_updated }}.</i>
 {%- else -%}
-    <i>Posted: {{ page.date | date: date_format }}.</i>
+    <i>Posted: {{ page.date | date: site.date_format }}.</i>
 {%- endif -%}
