@@ -3,14 +3,17 @@ title: Statistical Models of Gene Expression Analysis
 layout: post
 use_toc: true
 use_math: true
-excerpt: Why is the negative binomial distribution used to model sequencing read counts? What do FPKM and TPM mean?
+excerpt: Why is the negative binomial distribution used to model sequencing read counts? What do FPKM and TPM mean? What are common models of differential gene expression and pathway analysis?
+last_updated: 2020-05-21
 ---
+
+$$
+\newcommand{\abs}[1]{\left\lvert#1\right\rvert}
+$$
 
 # Probability distribution of counts
 
-## Probability background
-
-### Negative binomial distribution
+## Negative binomial distribution
 
 $$K \sim \text{NB}(r, p)$$: number of failures until $$r$$ successes have occurred; $$p$$ is the probability of success
 
@@ -41,7 +44,7 @@ Notes and References
 2. [Wikipedia](https://en.wikipedia.org/wiki/Negative_binomial_distribution) uses "success" and "failure" oppositely of the formulation presented here. Swap $$p$$ and $$1 - p$$ for the equations to match.
 3. For a reference that matches the formulation used here, see [https://www.johndcook.com/negative_binomial.pdf](https://www.johndcook.com/negative_binomial.pdf).
 
-#### Properties
+### Properties
 
 $$\begin{aligned}
 \mathbb{E}(K) &= \mu = \frac{r(1 - p)}{p} \\
@@ -66,7 +69,7 @@ Now, we can equivalently parameterize the negative binomial distribution as foll
 
   $$P(K = k) = {k + \frac{1}{\alpha} - 1 \choose k} \left(\frac{1}{1 + \alpha \mu} \right)^{\frac{1}{\alpha}} \left(\frac{\alpha \mu}{1 + \alpha \mu} \right)^k$$
 
-#### Formulation as Gamma-Poisson
+### Formulation as Gamma-Poisson
 
 Idea: $$K$$ is a Poisson distribution where the mean of the Poisson distribution is proportional to a Gamma-distributed random variable.
 
@@ -254,31 +257,13 @@ Formally, consider a set of raw reads $$F'$$. Reads from the same fragment are t
 
 </details>
 
-<a name="references"></a>
-<details markdown="block"><summary>References</summary>
-
-1. Robinson, M. D. & Oshlack, A. A scaling normalization method for differential expression analysis of RNA-seq data. *Genome Biol* 11, R25 (2010). [https://doi.org/10.1186/gb-2010-11-3-r25](https://doi.org/10.1186/gb-2010-11-3-r25).
-2. Lipp, J. Why sequencing data is modeled as negative binomial. *Bioramble* (2016). [https://bioramble.wordpress.com/2016/01/30/why-sequencing-data-is-modeled-as-negative-binomial/](https://bioramble.wordpress.com/2016/01/30/why-sequencing-data-is-modeled-as-negative-binomial/).
-3. Anders, S. & Huber, W. Differential expression analysis for sequence count data. *Genome Biol* 11, R106 (2010). [https://doi.org/10.1186/gb-2010-11-10-r106](https://doi.org/10.1186/gb-2010-11-10-r106).
-   - DESeq paper.
-4. Pachter, L. Models for transcript quantification from RNA-Seq. *arXiv*:1104.3889 [q-bio, stat] (2011). [http://arxiv.org/abs/1104.3889](http://arxiv.org/abs/1104.3889).
-5. Mortazavi, A., Williams, B. A., McCue, K., Schaeffer, L. & Wold, B. Mapping and quantifying mammalian transcriptomes by RNA-Seq. *Nature Methods* 5, 621–628 (2008). [https://doi.org/10.1038/nmeth.1226](https://doi.org/10.1038/nmeth.1226).
-   - One of the original\* RNA-seq papers; introduces RPKM metric. \*See [Wikipedia](https://en.wikipedia.org/wiki/RNA-Seq#History), [Lior Pachter's \*Seq chronology](https://liorpachter.wordpress.com/seq/), and [this blog post](http://nextgenseek.com/2014/03/the-first-published-paper-on-rna-seq-setting-the-record-straight/).
-7. Trapnell, C. et al. Transcript assembly and quantification by RNA-Seq reveals unannotated transcripts and isoform switching during cell differentiation. *Nature Biotechnology* 28, 511–515 (2010). [https://doi.org/10.1038/nbt.1621](https://doi.org/10.1038/nbt.1621).
-   - Cufflinks paper; introduces FPKM metric.
-8. Li, B. & Dewey, C. N. RSEM: accurate transcript quantification from RNA-Seq data with or without a reference genome. *BMC Bioinformatics* 12, 323 (2011). [https://doi.org/10.1186/1471-2105-12-323](https://doi.org/10.1186/1471-2105-12-323).
-   - RSEM paper; introduces TPM metric.
-9. Pachter, L. Estimating number of transcripts from RNA-Seq measurements (and why I believe in paywall). *Bits of DNA* (2014). [https://liorpachter.wordpress.com/2014/04/30/estimating-number-of-transcripts-from-rna-seq-measurements-and-why-i-believe-in-paywall/](https://liorpachter.wordpress.com/2014/04/30/estimating-number-of-transcripts-from-rna-seq-measurements-and-why-i-believe-in-paywall/).
-
-</details>
-
 # Differential expression analysis
 
 ## DESeq / DESeq2
 
 ### Dataset
 
-Dataset numbers
+Dataset size
 - $$n$$: number of genes
 - $$m$$: number of samples
 - $$c$$: number of conditions (including intercept)
@@ -288,7 +273,9 @@ Count matrix: $$K \in \mathbb{N}^{n \times m}$$
 - Columns: samples
 - $$K_{ij}$$: number of sequencing reads mapped to gene $$i$$ in sample $$j$$
 
-#### Model (aka design) matrix: $$X \in \{0,1\}^{m \times c}$$
+#### Model (aka design) matrix
+
+$$X \in \{0,1\}^{m \times c}$$
 - Rows: samples
 - Columns: conditions
 - Example: Each sample is a patient
@@ -388,11 +375,11 @@ Hierarchical construction of negative binomial
   - []()$$\mathbb{E}(R_{ij}) = a_{ij} \theta_{ij} = q_{ij}$$ <!-- The empty links []() are necessary for the math to be rendered in-line, since there is no text on the line. -->
   - []()$$\text{Var}(R_{ij}) = a_{ij} \theta_{ij}^2 = v_{ij}$$
 - []()$$K_{ij} \mid R_{ij} \sim \text{Poi}(s_j R_{ij}) \rightarrow K_{ij} \sim \text{NB}(\mu_{ij}, \alpha_i)$$
-  - $$\mu_{ij} = \mathbb{E}(K_{ij}) = a_{ij} s_j \theta_{ij} = s_j q_{ij}$$ [[Eq. (2), DESeq paper]](#references-1)
-  - $$\sigma^2_{ij} = \text{Var}(K_{ij}) = a_{ij} s_j \theta_{ij} + a_{ij} s_j^2 \theta_{ij}^2 = s_j q_{ij} + s_j^2 v_{ij}$$ [[Eq. (3), DESeq paper]](#references-1)
+  - $$\mu_{ij} = \mathbb{E}(K_{ij}) = a_{ij} s_j \theta_{ij} = s_j q_{ij}$$ [[Eq. (2), DESeq paper]](#references)
+  - $$\sigma^2_{ij} = \text{Var}(K_{ij}) = a_{ij} s_j \theta_{ij} + a_{ij} s_j^2 \theta_{ij}^2 = s_j q_{ij} + s_j^2 v_{ij}$$ [[Eq. (3), DESeq paper]](#references)
   - []()$$\alpha_i = \frac{1}{a_{ij}} = \frac{v_{ij}}{q_{ij}^2}$$
 
-Parameters (in order of estimation) [[DESeq2 vignette]](#references-1)
+Parameters (in order of estimation) [[DESeq2 vignette]](#references)
 - $$s_{ij}$$: gene- and sample-specific normalization factor
   - By default, DESeq2 uses only a sample-specific normalization factor by assuming $$s_{ij} = s_j$$ for all $$i = 1, ..., n$$. This will account for differences in total reads (sequencing depth). See the median-of-ratios method described under the [Normalization](#normalization) section.
   - To account for effects of GC content, gene length, and other gene-specific properties during the sample preparation (e.g., PCR amplification) and sequencing processes, consider using packages/methods like [cqn](https://www.bioconductor.org/packages/release/bioc/html/cqn.html) or [EDASeq](https://bioconductor.org/packages/release/bioc/html/EDASeq.html) to calculate gene-specific normalization factors.
@@ -407,58 +394,264 @@ Parameters (in order of estimation) [[DESeq2 vignette]](#references-1)
 
 #### Sharing dispersion information across genes
 
-When sample sizes are small, dispersion estimates $$\alpha_i$$ are highly variable (noisy). DESeq2 addresses this problem by assuming that "genes of similar average expression strength have similar dispersion." The counts $$K_{ij}$$ are first fit to the negative binomial model (as a generalized linear model) using MLE. Next, DESeq2 fits a smooth curve regressing the MLE dispersion estimate against the mean of normalized counts. Finally, the MLE estimates are shrunk towards the smooth curve by treating the smooth curve as a prior and generating MAP estimates of the dispersion values. [[DESeq2 paper]](#references-1)
+When sample sizes are small, dispersion estimates $$\alpha_i$$ are highly variable (noisy). DESeq2 addresses this problem by assuming that "genes of similar average expression strength have similar dispersion." The counts $$K_{ij}$$ are first fit to the negative binomial model (as a generalized linear model) using MLE. Next, DESeq2 fits a smooth curve regressing the MLE dispersion estimate against the mean of normalized counts. Finally, the MLE estimates are shrunk towards the smooth curve by treating the smooth curve as a prior and generating MAP estimates of the dispersion values. [[DESeq2 paper]](#references)
 
-<a name="references-1"></a>
-<details markdown="block"><summary>References</summary>
+# Knowledge base-driven pathway analysis
 
-1. Anders, S. & Huber, W. Differential expression analysis for sequence count data. *Genome Biol* 11, R106 (2010). [https://doi.org/10.1186/gb-2010-11-10-r106](https://doi.org/10.1186/gb-2010-11-10-r106).
-   - DESeq paper.
-2. Love, M. I., Huber, W. & Anders, S. Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. *Genome Biol* 15, 550 (2014). [https://doi.org/10.1186/s13059-014-0550-8](https://doi.org/10.1186/s13059-014-0550-8).
-   - DESeq2 paper.
-3. Holmes, S. & Huber, W. *Modern Statistics for Modern Biology*. (Cambridge University Press, 2018). [https://web.stanford.edu/class/bios221/book/index.html](https://web.stanford.edu/class/bios221/book/index.html).
-   - [Chapter 4](https://web.stanford.edu/class/bios221/book/Chap-Mixtures.html) derives the negative binomial model as a hierarchical Gamma-Poisson model.
-   - [Chapter 8](https://web.stanford.edu/class/bios221/book/Chap-CountData.html) describes the DESeq2 model.
-4. Love, M. I., Anders, S. & Huber, W. Analyzing RNA-seq data with DESeq2. [https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html) (2020).
-   - DESeq2 vignette.
+Let $$G$$ denote the set of all genes considered, with $$\abs{G} = N$$. For example, if we consider all protein-coding human genes, $$N \approx 20438$$ (according to statistics from [Ensembl](http://www.ensembl.org/Homo_sapiens/Info/Annotation)).
 
-</details>
-
-# Pathway analysis
-
-## GSEA
-
-Data
+Input
 - Expression matrix
-  - Rows: genes tested
-  - Columns: samples (control1, control2, ..., cancer1, cancer2, ...)
-- Gene sets
+  - Rows: genes $$G$$
+  - Columns: samples labeled by phenotype (e.g., control1, control2, cancer1, cancer2, ...)
+- Pathways (gene sets)
+  - In the sections below, I use the symbol $$S$$ to denote a gene set of interest.
+  - Following [[Khatri et al.]](#references), the sections below focus "on methods that exploit pathway knowledge in public repositories such as GO ... rather than on methods [such as [WGCNA](https://horvath.genetics.ucla.edu/html/CoexpressionNetwork/Rpackages/WGCNA/)] that infer pathways from molecular measurements." Consequently, the analyses are only as good as the pathways annotated in existing databases; see [[Tomczak et al.]](#references) and [[Haynes et al.]](#references).
+
+## Over-representation analysis (ORA)
+
+Idea: "statistically evaluates the fraction of genes in a particular pathway found among the set of genes showing changes in expression" [[Khatri et al.]](#references)
+
+Assumptions
+1. Each gene is independent of other genes.
+2. Each pathway is independent of other pathways.
+
+Limitations
+1. Ignores real values associated with each gene, since it only considers whether a gene is part of some gene set or not.
+2. Only uses inforation from the most significantly differentially expressed genes.
+
+Method
+1. Choose set $$\delta$$ of differentially expressed genes (DEGs). Common threshold: fold-change > 2 and $$q$$-value < 0.05.
+2. For each pathway gene set $$S$$ (of size $$\abs{S} = N_S$$), test for enrichment of DEGs. The null hypothesis is that the set of DEGs is not enriched for genes in the pathway, i.e., the proportion $$\frac{\abs{\delta \cap S}}{\abs{\delta}}$$ of pathway genes in the set of DEGs is the same as the proportion $$\frac{\abs{S}}{N}$$ of pathway genes in the set of all genes.
+   - <span style="color: red">[Khatri et al. (Text S2.3)](#references) argues that ORA approaches test competitive null hypotheses because they compare "the proportion of differentially expressed genes in a pathway with the proportion of differentially expressed genes not in the pathway." However, the second "proportion" should be the proportion of pathway genes in the set of all genes.</span>
+   - Test sample: $$x = \abs{\delta \cap S}$$. $$\abs{\delta}$$ genes are drawn from the set $$\delta$$ of all DEGs.
+   - Null distribution: $$\abs{\delta}$$ genes are drawn from the set $$G$$ of all genes.
+     - Binomial: assumes genes are drawn with replacement. $$X \sim \mathrm{Binom}(n = \abs{\delta}, p = \frac{N_S}{N})$$.
+
+       $$
+       p
+       = P(X \geq x)
+       = 1 - \sum_{k=0}^{x-1} P(X = k)
+       = 1 - \sum_{k=0}^{x-1} {\abs{\delta} \choose k} \left(\frac{N_S}{N}\right)^k \left(1 - \frac{N_S}{N} \right)^{\abs{\delta} - k}
+       $$
+
+     - Hypergeometric (Fisher's exact test): assumes genes are drawn without replacement. $$X \sim \mathrm{Hyper}(N = N, n = \abs{\delta}, K = N_S)$$, where the notation follows [Wikipedia](https://en.wikipedia.org/wiki/Hypergeometric_distribution).
+
+       $$
+       p
+       = P(X \geq x)
+       = 1 - \sum_{k=0}^{x-1} P(X = k)
+       = 1 - \sum_{k=0}^{x-1} \frac{ {N_S \choose k}{N - N_S \choose \abs{\delta} - k}}{ {N \choose \abs{\delta}}}
+       $$
+
+## Functional class scoring (FCS)
+
+Idea: "weaker but coordinated changes in sets of functionally related genes (i.e., pathways) can also have significant effects" [[Khatri et al.]](#references)
+
+Method
+1. Compute gene-level statistics. Examples:
+   - correlation with phenotype
+   - t-statistic
+   - fold-change
+2. Aggregate gene-level statistics into a single pathway-level statistic. Examples:
+   - Kolmogorov-Smirnov statistic
+   - sum, mean, or median of gene-level statistics
+   - Wilcoxon rank sum
+3. Assess the statistical significance of the pathway-level statistic.
+   - Competitive null hypothesis: "genes in a pathway are at most as often differentially expressed as the genes not in the pathway" [[Khatri et al., Text S2.3]](#references)
+     - Null distribution: permute gene labels
+   - Self-contained null hypothesis: "no genes in a given pathway are differentially expressed" [[Khatri et al., Text S2.3]](#references)
+     - Null distribution: permute class (phenotype) labels for each sample. This null incorporates the correlation structure of genes. This is reasonable if we assume that most pathways are not affected by different phenotypic conditions.
+
+Assumptions
+1. Each pathway is independent of other pathways.
+2. [Only for the self-contained null hypothesis] The correlation structure of genes is preserved across phenotypic conditions.
+
+### GSEA
+
+Acronym: Gene Set Enrichment Analysis
 
 Algorithm
-1. Rank genes according to differential expression
-   - Rank according to fold-change between average (or median) expression between conditions
-2. Use random walk to calculate enrichment score
-   - Use index $$i \in \{1, ..., n_\text{total}\}$$ to denote ranked genes, where $$i = 1$$ corresponds to gene with largest positive fold-change
-   - Use labels $$y_i \in \{0, 1\}$$ to denote whether ranked gene $$i$$ is in the gene set of interest
+1. Compute gene-level statistic: fold-change of average expression between conditions, correlation between expression and phenotype, etc.
+2. Rank genes from most-to-least differentially-expressed according to their gene-level statistic.
+   - Let $$r_i$$ denote the gene-level statistic of the $$i$$th ranked gene $$g_i$$, where $$i \in [1, N]$$.
+3. Use a "random walk" to calculate enrichment score (ES).
+   - Use labels $$y_i \in \{0, 1\}$$ to denote whether ranked gene $$i$$ is in the gene set $$S$$ of interest.
+   - Old method [[GSEA 2003]](#references): equal weights at every step; $$\text{ES}$$ is a standard [Kolmogorov-Smirnov](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test) statistic.
 
-   $$p_\text{hit} = \sqrt{\frac{n_\text{total} - n_\text{gene set}}{n_\text{gene set}}}$$
+     $$\begin{gathered}
+     p_\text{hit} = \sqrt{\frac{N - N_S}{N_S}} \\
+     p_\text{miss} = -\sqrt{\frac{N_S}{N - N_S}} \\
+     \text{ES} = \max_{n \in [1, N]} \left\lvert \sum_{i=1}^n y_i p_\text{hit} + (1 - y_i) p_\text{miss} \right\rvert
+     \end{gathered}$$
 
-   $$p_\text{miss} = -\sqrt{\frac{n_\text{gene set}}{n_\text{total} - n_\text{gene set}}}$$
+   - New method [[GSEA 2005]](#references): steps are weighted according to each gene's gene-level statistic; $$\text{ES}$$ is a weighted [Kolmogorov-Smirnov](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test) statistic.
+     - Formulation to match the notation of the old method:
 
-   $$\text{ES} = \max_n \sum_{i=1}^n y_i p_\text{hit} + (1 - y_i) p_\text{miss}$$
+       $$\begin{aligned}
+       p_\text{hit}(i) &= \begin{cases}
+         \frac{\abs{r_i}^p}{N_R} & i \in S \\
+         0 & \text{otherwise}
+       \end{cases}, & N_R = \sum_{j=1}^N y_j \abs{r_j}^p \\
+       p_\text{miss} &= -\frac{1}{N - N_S} \\
+       \text{ES} &= \max_{n \in [1, N]} \left\lvert \sum_{i=1}^n y_i p_\text{hit}(i) + (1 - y_i) p_\text{miss} \right\rvert
+       \end{aligned}$$
 
-   - For simplicity, the equation for $$\text{ES}$$ above only looks for positive enrichment, but can also look at the minimum value achieved during the random walk.
-3. Estimate significance with permutation test
-   - Permute column labels of expression matrix, recalculate enrichment score
-4. Correct for multiple hypothesis testing (each gene set is a hypothesis)
+     - Formulation from the 2005 paper:
 
-Note that
+       $$\begin{aligned}
+       P_\text{hit}(S, i) &= \sum_{g_j \in S,\, j \leq i} \frac{\abs{r_j}^p}{N_R}, & N_R = \sum_{g_j \in S}^N \abs{r_j}^p \\
+       P_\text{miss}(S, i) &= \sum_{g_j \notin S,\, j \leq i} \frac{1}{N - N_S} \\
+       \text{ES}(S) &= \max_{i \in [1, N]} \left\lvert P_\text{hit}(S, i) - P_\text{miss}(S, i) \right\rvert
+       \end{aligned}$$
 
-$$\begin{aligned}
-  \sum_{i=1}^{n_\text{total}} y_i p_\text{hit} + (1 - y_i) p_\text{miss}
-  &= n_\text{gene set} p_\text{hit} + (n_\text{total} - n_\text{gene set}) p_\text{miss} \\
-  &= \sqrt{n_\text{gene set} (n_\text{total} - n_\text{gene set})} - \sqrt{(n_\text{total} - n_\text{gene set}) n_\text{gene set}} \\
-  &= 0
-\end{aligned}$$
+       - $$P_\text{hit}(S, i)$$ and $$P_\text{miss}(S, i)$$ are the fraction (with respect to genes $$i = 1, ..., i$$) of genes in / not in $$S$$ weighted by their gene-level statistics.
+     - $$p$$ is a hyperparameter controlling the weight of each step in the random walk.
+       - The authors recommend a default of $$p = 1$$. [[GSEA 2005 supplemental]](#references)
+       - When $$p=0$$, the new method becomes nearly identical to the old method with equal weights at every step: $$p_\text{hit}(i)$$ becomes $$\frac{1}{N_S}$$.
+   - Note that the "random walk" always returns to 0:
+     - Old method:
 
-Reference: Stanford BMI 214, Lecture by Emily Flynn, 10/8/2019
+       $$\begin{aligned}
+         \sum_{i=1}^{N} y_i p_\text{hit} + (1 - y_i) p_\text{miss}
+         &= N_S p_\text{hit} + (N - N_S) p_\text{miss} \\
+         &= \sqrt{N_S (N - N_S)} - \sqrt{(N - N_S) N_S} \\
+         &= 0
+       \end{aligned}$$
+
+     - New method:
+
+       $$\begin{aligned}
+         \sum_{i=1}^{N} y_i p_\text{hit}(i) + (1 - y_i) p_\text{miss}
+         &= \left( \sum_{i=1}^N y_i \frac{\abs{r_i}^p}{N_R} \right) + (N - N_S) \left(- \frac{1}{N - N_S}\right) \\
+         &= \left( \frac{1}{N_R} \sum_{i=1}^N y_i \abs{r_i}^p \right) - 1 \\
+         &= \frac{1}{N_R} N_R - 1 \\
+         &= 0
+       \end{aligned}$$
+
+4. Estimate significance with permutation test.
+   1. Permute column labels of expression matrix.
+   2. Perform steps 1-3 of the GSEA algorithm with the permuted expression matrix (including re-computing gene-level statistics and re-ranking genes) and compute an enrichment score.
+      - [New method only] Discard this enrichment score sampled from the null distribution if its sign does not match the sign of the observed $$\text{ES}(S)$$. Separately considering positively and negatively scoring gene sets is necessary because
+        > the use of weighted steps could cause the distribution of observed enrichment scores to be asymmetric in cases where many more genes are correlated with one of the two phenotypes. <span style="color: red">Why?</span>
+   3. Estimate nominal $$p$$-value for $$\text{ES}(S)$$ from the null distribution.
+   4. [New method only] Compute a normalized enrichment score $$\text{NES}(S)$$ that adjusts for variation in gene set size.
+5. Correct for multiple hypothesis testing (each gene set is a hypothesis).
+
+## Pathway-topology (PT)-based approaches
+
+Idea: Take advantage of knowledge (e.g., KEGG, MetaCyc, Reactome, PantherDB) of how (subcellular localization; activation/inhibition; etc.) genes in a pathway interact, not just the knowledge that they are in the same pathway.
+
+Method: Generally follows same three steps as [functional class scoring](#functional-class-scoring-fcs) but incorporates additional pathway information in computing gene-level and pathway-level statistics.
+
+Limitations
+- > [T]rue pathway topology is dependent on the type of cell due to cell-specific gene expression profiles and [the] condition being studied. [[Khatri et al.]](#references)
+
+### SPIA
+
+Acronym: Signaling Pathway Impact Analysis
+
+Idea
+> The impact analysis combines two types of evidence: (i) the over-representation of DE genes in a given pathway and (ii) the abnormal perturbation of that pathway, as measured by propagating measured expression changes across the pathway topology. These two aspects are captured by two independent probability values, $$P_{NDE}$$ and $$P_{PERT}$$. [[SPIA paper]](#references)
+
+**DEG enrichment analysis: $$P_{NDE}$$**
+
+> Any of the existing ORA or FCS approaches can be used to calculate $$P_{NDE}$$, as long as this probability remains independent of the magnitudes of the fold-changes.
+
+**Pathway perturbation analysis: $$P_{PERT}$$**
+
+Define the following symbols:
+- $$g_1, ..., g_{N_S}$$: genes in the pathway $$S$$
+- $$\Delta E(g_i)$$: $$\log_2$$ fold-change in expression of gene $$g_i$$
+- $$N_{ds}(g_i)$$: number of genes downstream of $$g_i$$ in the pathway
+- $$\beta_{i,j} = \begin{cases}
+   -1 & \text{gene } j \text{ inhibits gene } i \\
+    1 & \text{gene } j \text{ activates gene } i \\
+    0 & \text{otherwise}
+  \end{cases}$$
+- $$PF(g_i)$$: perturbation factor of gene $$i$$ (this is the gene-level statistic)
+
+Linear system
+
+$$PF(g_i) = \Delta E(g_i) + \sum_{j=1}^{N_S} \beta_{ij} \frac{PF(g_j)}{N_{ds}(g_j)}$$
+
+
+$$
+\underbrace{\begin{bmatrix}
+  PF(g_1) \\ PF(g_2) \\ \vdots \\ PF(g_N)
+\end{bmatrix}}_{PF}
+=
+\underbrace{\begin{bmatrix}
+  \Delta E(g_1) \\ \Delta E(g_2) \\ \vdots \\ \Delta E(g_{N_S})
+\end{bmatrix}}_{\Delta E}
++
+\underbrace{\begin{bmatrix}
+  \frac{\beta_{1, 1}}{N_{ds}(g_1)} & \frac{\beta_{1, 2}}{N_{ds}(g_2)} & \cdots & \frac{\beta_{1, N_S}}{N_{ds}(g_{N_S})} \\
+  \frac{\beta_{2, 1}}{N_{ds}(g_1)} & \frac{\beta_{2, 2}}{N_{ds}(g_2)} & \cdots & \frac{\beta_{2, N_S}}{N_{ds}(g_{N_S})} \\
+  \vdots & & \ddots & \vdots \\
+  \frac{\beta_{N_S, 1}}{N_{ds}(g_1)} & \frac{\beta_{N_S, 2}}{N_{ds}(g_2)} & \cdots & \frac{\beta_{N_S, N_S}}{N_{ds}(g_{N_S})}
+\end{bmatrix}}_B
+\times
+\underbrace{\begin{bmatrix}
+  PF(g_1) \\ PF(g_2) \\ \vdots \\ PF(g_{N_S})
+\end{bmatrix}}_{PF}
+$$
+
+Observe that the perturbation factor of gene $$j$$ is distributed among all its downstream interacting partners. (This is reminiscent of the PageRank system of equations.)
+
+The net accumulations of the perturbations from other genes on gene $$i$$ is $$\text{Acc}(g_i) = PF(g_i) - \Delta E(g_i)$$. The total accumulated perturbation in the pathway $$S$$ is then computed as the pathway-level statistic
+
+$$t_A = \sum_{i=1}^{N_S} \mathrm{Acc}(g_i)$$
+
+Finally, $$P_{PERT} = P(T_A \geq t_A \mid H_0)$$ is calculated as the $$p$$-value of the pathway-level statistic $$t_A$$ following a bootstrap procedure described in the supplemental text of the [[SPIA paper]](#references).
+
+**Combining DEG and pathway analyses: $$P_G$$**
+
+Let the observed / computed values of $$P_{NDE}$$ and $$P_{PERT}$$ be $$p_{nde}, p_{pert}$$, respectively with $$p_{nde} \cdot p_{pert} = c$$.
+
+Since $$P_{NDE}$$ and $$P_{PERT}$$ are $$p$$-values, under the null hypothesis they are uniformly distributed on the interval $$[0, 1]$$. The support of their joint distribution is therefore the unit square. Since $$P_{NDE}$$ and $$P_{PERT}$$ are independent, points with the same probability lie as $$(p_{nde}, p_{pert})$$ lie along the hyperbola defined by $$P_{NDE} P_{PERT} = c$$. Then, the probability of obtaining a set of $$p$$-values as extreme or more extreme than $$(p_{nde}, p_{pert})$$ is the area under and to the left of the hyperbola (see Figure S1 in the [[SPIA paper]](#references)):
+
+$$
+P_G
+= \int_0^c dP_{NDE} + \int_c^1 \frac{c}{P_{NDE}} dP_{NDE}
+= c + c \cdot \ln P_{NDE} \rvert_c^1
+= c - c \cdot \ln c
+$$
+
+# References
+
+1. Robinson, M. D. & Oshlack, A. A scaling normalization method for differential expression analysis of RNA-seq data. *Genome Biol* 11, R25 (2010). [doi:10.1186/gb-2010-11-3-r25](https://doi.org/10.1186/gb-2010-11-3-r25).
+   - > Depending on the experimental situation, Poisson seems appropriate for technical replicates and Negative Binomial may be appropriate for the additional variation observed from biological replicates.
+   - Presents a library count [normalization](#normalization) method "trimmed mean of M values" (TMM).
+2. Lipp, J. Why sequencing data is modeled as negative binomial. *Bioramble* (2016). [https://bioramble.wordpress.com/2016/01/30/why-sequencing-data-is-modeled-as-negative-binomial/](https://bioramble.wordpress.com/2016/01/30/why-sequencing-data-is-modeled-as-negative-binomial/).
+3. Anders, S. & Huber, W. Differential expression analysis for sequence count data. *Genome Biol* 11, R106 (2010). [doi:10.1186/gb-2010-11-10-r106](https://doi.org/10.1186/gb-2010-11-10-r106).
+   - DESeq paper.
+4. Love, M. I., Huber, W. & Anders, S. Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. *Genome Biol* 15, 550 (2014). [doi:10.1186/s13059-014-0550-8](https://doi.org/10.1186/s13059-014-0550-8).
+   - DESeq2 paper.
+5. Love, M. I., Anders, S. & Huber, W. Analyzing RNA-seq data with DESeq2. [https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html) (2020).
+   - DESeq2 vignette.
+6. Pachter, L. Models for transcript quantification from RNA-Seq. *arXiv*:1104.3889 [q-bio, stat] (2011). [http://arxiv.org/abs/1104.3889](http://arxiv.org/abs/1104.3889).
+   - Derives general likelihood model for RNA-seq reads, likelihood estimation of $$p$$ and $$\alpha$$ values, and inference using the EM-algorithm.
+8. Mortazavi, A., Williams, B. A., McCue, K., Schaeffer, L. & Wold, B. Mapping and quantifying mammalian transcriptomes by RNA-Seq. *Nature Methods* 5, 621–628 (2008). [doi:10.1038/nmeth.1226](https://doi.org/10.1038/nmeth.1226).
+   - One of the original RNA-seq papers; introduces RPKM metric. See [Wikipedia](https://en.wikipedia.org/wiki/RNA-Seq#History), [Lior Pachter's \*Seq chronology](https://liorpachter.wordpress.com/seq/), and [this blog post](http://nextgenseek.com/2014/03/the-first-published-paper-on-rna-seq-setting-the-record-straight/).
+9. Trapnell, C. et al. Transcript assembly and quantification by RNA-Seq reveals unannotated transcripts and isoform switching during cell differentiation. *Nature Biotechnology* 28, 511–515 (2010). [doi:10.1038/nbt.1621](https://doi.org/10.1038/nbt.1621).
+   - Cufflinks paper; introduces FPKM metric.
+10. Li, B. & Dewey, C. N. RSEM: accurate transcript quantification from RNA-Seq data with or without a reference genome. *BMC Bioinformatics* 12, 323 (2011). [doi:10.1186/1471-2105-12-323](https://doi.org/10.1186/1471-2105-12-323).
+    - RSEM paper; introduces TPM metric.
+11. Pachter, L. Estimating number of transcripts from RNA-Seq measurements (and why I believe in paywall). *Bits of DNA* (2014). [https://liorpachter.wordpress.com/2014/04/30/estimating-number-of-transcripts-from-rna-seq-measurements-and-why-i-believe-in-paywall/](https://liorpachter.wordpress.com/2014/04/30/estimating-number-of-transcripts-from-rna-seq-measurements-and-why-i-believe-in-paywall/).
+    - Explains why the FPKM value of a single gene cannot be converted to "transcripts per cell" without knowing the FPKM values of all genes.
+12. Holmes, S. & Huber, W. *Modern Statistics for Modern Biology*. (Cambridge University Press, 2018). [https://web.stanford.edu/class/bios221/book/index.html](https://web.stanford.edu/class/bios221/book/index.html).
+    - [Chapter 4](https://web.stanford.edu/class/bios221/book/Chap-Mixtures.html) derives the negative binomial model as a hierarchical Gamma-Poisson model.
+    - [Chapter 8](https://web.stanford.edu/class/bios221/book/Chap-CountData.html) describes the DESeq2 model.
+13. Khatri, P., Sirota, M. & Butte, A. J. Ten Years of Pathway Analysis: Current Approaches and Outstanding Challenges. *PLoS Computational Biology* 8, e1002375 (2012). [doi:10.1371/journal.pcbi.1002375](https://doi.org/10.1371/journal.pcbi.1002375).
+    - Classifies existing pathway analysis methods (as of 2012) into one of three approaches: ORA, FCS, or PT; analyzes the assumptions and limitations of each approach.
+14. Mootha, V. K. et al. PGC-1α-responsive genes involved in oxidative phosphorylation are coordinately downregulated in human diabetes. *Nature Genetics* 34, 267–273 (2003). [doi:10.1038/ng1180](https://doi.org/10.1038/ng1180).
+    - Preliminary GSEA paper.
+15. Subramanian, A. et al. Gene set enrichment analysis: A knowledge-based approach for interpreting genome-wide expression profiles. *Proc. Natl. Acad. Sci.* 102, 15545–15550 (2005). [doi:10.1073/pnas.0506580102](https://doi.org/10.1073/pnas.0506580102).
+    - Robust GSEA paper. Describes software package `GSEA-P` and the creation of the Molecular Signature Database (MSigDB).
+16. Tomczak, A. et al. Interpretation of biological experiments changes with evolution of the Gene Ontology and its annotations. *Scientific Reports* 8, 5115 (2018). [doi:10.1038/s41598-018-23395-2](https://doi.org/10.1038/s41598-018-23395-2).
+    - > Our analysis suggests that GO evolution may have affected the interpretation and possibly reproducibility of experiments over time.
+17. Haynes, W. A., Tomczak, A. & Khatri, P. Gene annotation bias impedes biomedical research. *Scientific Reports* 8, 1362 (2018). [doi:10.1038/s41598-018-19333-x](https://doi.org/10.1038/s41598-018-19333-x).
+    - > Collectively, our results provide an evidence of a strong research bias in literature that focuses on well-annotated genes instead of those with the most significant disease relationship in terms of both expression and genetic variation.
+18. Tarca, A. L. et al. A novel signaling pathway impact analysis. *Bioinformatics* 25, 75–82 (2009). [doi:10.1093/bioinformatics/btn577](https://doi.org/10.1093/bioinformatics/btn577).
+    - SPIA paper.
