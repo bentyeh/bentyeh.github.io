@@ -4,7 +4,7 @@ layout: post
 use_toc: true
 use_math: true
 excerpt: An introduction to cell mixture deconvolution and applications based on material taught in Stanford IMMUNOL 207, Spring 2020.
-hidden: true
+last_updated: 2020-05-20
 ---
 
 # Deconvolution
@@ -23,7 +23,7 @@ Given any two of the matrices, we can estimate the third matrix. Each of the thr
 
 1. In the first problem, each column (sample) of the sample proportions matrix is estimated independently, so the number of unknowns is the number of cell types $$c$$. Assuming the signature matrix is full rank, the number of linearly independent equations is $$n$$. Therefore, for the system to be overdetermined, we need $$n > c$$.
 2. In the second problem, each row (gene) of the signature matrix is estimated independently, so the number of unknowns is the number of cell types $$c$$. Assuming the sample proportions matrix is full rank, the number of linearly independent equations is $$k$$. Therefore, for the system to be overdetermined, we need $$k > c$$.
-   - <span style="color: red">Are there ways to estimate rows <i>dependently</i> and take advantage of existing gene-gene correlation patterns?</span>
+   - While we want the estimation method to accurately capture differences between cell type-specific profiles, future work may consider taking advantage of known gene-gene correlation patterns, especially when the number of samples $$k$$ is small. For example, we expect *a priori* that genes regulated by the same transcription factor(s) have correlated expression values. This suggests the potential use of Bayesian priors, which would even permit probabilistic intepretations (e.g., building confidence intervals) of predicted cell type-specific expression values.
 3. In the third problem, the bulk profile estimate is a simple matrix multiplication of the signature matrix and the sample proportions matrix.
 
 In general, there are two ways of evaluating deconvolution accuracy:
@@ -43,8 +43,8 @@ Any linear regression technique (ordinary least squares, lasso regression, ridge
 $$\mathbf{\hat{f}} = H^\dagger \mathbf{m} = \left(H^\top H\right)^{-1} H^\top \mathbf{m}$$
 
 Some potentially useful constraints that these methods ignore include the following:
-1. Cell-type proportions $$f$$ should be non-negative.
-2. It may be desirable that the elements of $$f$$ sum to 1.
+1. Cell type proportions $$\mathbf{\hat{f}}$$ should be non-negative.
+2. It may be desirable that the elements of $$\mathbf{\hat{f}}$$ sum to 1.
 
 ### CIBERSORT
 
@@ -55,11 +55,13 @@ CIBERSORT uses linear $$\nu$$-support vector regression ($$\nu$$-SVR), which is 
 
 CIBERSORT evaluates the significance of the estimation against a null hypothesis that no cell types in the signature matrix are present in the sample. The null distribution of reconstruction accuracies is generated as follows:
 1. Randomly sample (with replacement) $$\mathbf{m}$$ to generate $$\mathbf{m^*}$$.
-   - <span style="color: red">Why does this simulate a null hypotehsis that no cell types in the signature matrix are present in the sample?</span>
+   - Sampling gene expression values from $$\mathbf{m}$$ itself (rather than, say, a normal distribution) ensures that the gene expression *values* in the null gene expression profiles $$\mathbf{m^*}$$ come from the same distribution as the observed values. This ensures a more realistic and biologically-relevant null distribution of gene expression *profiles* since the only difference between the randomly sampled profiles $$\mathbf{m^*}$$ and the observed profile is the relative expression value between genes (i.e., gene-gene correlations).
+   - We expect that these randomly sampled gene expression profiles do not follow patterns of gene expression (i.e., gene-gene correlations) present in the signature matrix; in other words, the relative expression of genes in $$\mathbf{m^*}$$ should not match the relative expression of any cell type (or linear combination of cell types) in the signature matrix.
+   - In summary, the significance estimation procedure empirically evaluates the probability of randomly generating a gene expression profile $$\mathbf{m^*}$$ that can be as well represented by a linear combination of cell type-specific reference profiles in the signature matrix as the observed profile $$\mathbf{m}$$.
 2. Estimate the corresponding cellular fractions $$\mathbf{f^*}$$ using CIBERSORT.
 3. Measure the accuracy (Pearson correlation) of the reconstruction between $$\mathbf{m^*}$$ and $$H \mathbf{f^*}$$.
 
-Here's an example of generating the null distribution, where random numbers were used to create $$H$$ and $$m$$.
+Note that the null distribution of reconstruction accuracies (e.g., Pearson correlations) will likely not be 0-centered and instead be positively centered, leading to a relatively conservative estimate of significance. We can see using the example Python code below that solving an overdetermined linear system, even one constructued using random numbers, still recovers some information. <!-- TODO: Explanation why this is true. -->
 
 ```{python}
 import numpy as np
@@ -82,15 +84,15 @@ plt.hist(corrs, bins=25)
 
 Signature matrices can be generated independently of a deconvolution method by combining expression profiles and selecting cell-type specific genes. Established basis matrices for immune cell types include IRIS (2005), LM22 (2015), and immunoStates (2018). This article does not attempt to explain how to generate such basis matrices, and we refer the reader to the [immunoStates paper](#references) for a more in-depth discussion.
 
-Instead, we consider the problem of estimating sample-specific signature matrices $$H^{(j)} \in \mathbb{R}^{n \times c}$$ given a bulk matrix $$M$$ and known cell type proportions $$F$$. We motivate this problem by considering a short-coming of using a single signature matrix $$H$$ for all samples, which may come from different biological conditions (e.g., diseased versus healthy). Since the gene expression profile of the same cell type may change under different conditions, we may want to (re)construct sample-specific (or at least, condition-specific) signature matrices.
+Instead, we consider the problem of estimating sample-specific signature matrices $$H^{(j)} \in \mathbb{R}^{n \times c}$$ given a bulk matrix $$M$$ and known cell type proportions $$F$$. We motivate this problem by considering a short-coming of using a single signature matrix $$H$$ for all samples, which may come from different biological conditions (e.g., diseased versus healthy). Since the gene expression profile of the same cell type may change under different conditions, we may want to re-construct condition-specific ("group mode" in CIBERSORTx) or even sample-specific ("high-resolution mode" in CIBERSORTx) signature matrices.
 
-Then, by comparing these estimated signature matrices, we may be able to better understand how cell-type-specific gene expression changes across biological conditions.
+Then, by comparing these estimated signature matrices, we may be able to better understand how cell type-specific gene expression changes across biological conditions.
 
-In both the naive solution and the CIBERSORTx methods, we treat each gene independently.
+In both the naive solution and the CIBERSORTx methods, we treat each gene independently. We consider generating sample-specific signature matrices, but the equations below can easily generalize to condition-specific analyses.
 
 ### Naive solution
 
-A naive solution independently fits a signature matrix $$\hat{H}^{(j)}$$ for each sample $$j = 1, ..., k$$. However, simple linear methods, e.g., $$\hat{H}^{(j)} \approx \mathbf{m}_j \times \mathbf{f}_j^\dagger$$, result in an underdetermined system of linear equations: since each sample is modeled independently of other samples, each subproblem has $$k = 1$$, thus failing the requirement that $$k > c$$.
+A naive solution independently fits a signature matrix $$\hat{H}^{(j)}$$ for each sample $$j = 1, ..., k$$. However, simple linear methods, e.g., $$\hat{H}^{(j)} \approx \mathbf{m}_j \times \mathbf{f}_j^\dagger$$, result in an underdetermined system of linear equations: since each sample is modeled independently of other samples, each subproblem has $$k = 1$$ and fails the requirement that $$k > c$$.
 
 ### CIBERSORTx
 
@@ -127,7 +129,7 @@ Alternatively (and equivalently), $$G$$ can be thought of as a stack of $$c$$ ce
 
 In either case, the goal is to estimate $$G$$ given $$M$$ and $$F$$.
 
-<span style="color: red">I'm confused by the CIBERSORTx paper. By following the "Overview of CIBERSORTx analytical framework" section, I came to understand the problem statement as estimating sample-specific signature matrices. However, Figures 4abd seem to suggest the alternative problem statement of estimating cell-type specific signature matrices. Which is correct? What are the biological interpretations of each of these problem statements? When would one be preferred over the other? What are the problem statements behind the estimates shown in Figures 5f, 6b, and 6c?</span>
+<!-- <span style="color: red">I'm confused by the CIBERSORTx paper. By following the "Overview of CIBERSORTx analytical framework" section, I came to understand the problem statement as estimating sample-specific signature matrices. However, Figures 4abd seem to suggest the alternative problem statement of estimating cell-type specific signature matrices. Which is correct? What are the biological interpretations of each of these problem statements? When would one be preferred over the other? What are the problem statements behind the estimates shown in Figures 5f, 6b, and 6c?</span> -->
 
 However, we still have not addressed the problem of the naive formulation. To do so, CIBERSORTx uses an involved heuristic approach on top of non-negative least squares (NNLS) regression, which they validate on multiple synthetic and real datasets.
 
