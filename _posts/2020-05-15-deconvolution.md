@@ -3,6 +3,7 @@ title: Cell-mixture deconvolution and applications
 layout: post
 use_toc: true
 use_math: true
+use_code: true
 excerpt: An introduction to cell mixture deconvolution and applications based on material taught in Stanford IMMUNOL 207, Spring 2020.
 last_updated: 2020-05-20
 ---
@@ -63,7 +64,7 @@ CIBERSORT evaluates the significance of the estimation against a null hypothesis
 
 Note that the null distribution of reconstruction accuracies (e.g., Pearson correlations) will likely not be 0-centered and instead be positively centered, leading to a relatively conservative estimate of significance. We can see using the example Python code below that solving an overdetermined linear system, even one constructued using random numbers, still recovers some information. <!-- TODO: Explanation why this is true. -->
 
-```{python}
+```python
 import numpy as np
 import matplotlib.pyplot as plt
 n = 10
