@@ -21,7 +21,7 @@ toc_nav_id: toc-nav
 {%- endif -%}
 
 {%- if page.last_updated -%}
-    <i>Posted: {{ page.date | date: site.date_format }}. Last updated: {{ page.last_updated }}.</i>
+    <i>Posted: {{ page.date | date: site.date_format }}. Last updated: {{ page.last_updated | date: site.date_format }}.</i>
 {%- else -%}
     <i>Posted: {{ page.date | date: site.date_format }}.</i>
 {%- endif -%}
