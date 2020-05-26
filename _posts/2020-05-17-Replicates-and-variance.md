@@ -163,4 +163,4 @@ Is it unbiased?
 
 Here's some Python code to reproduce Figure 1B.
 
-<script src="https://gist.github.com/bentyeh/1eba71927ffd42dee088e5d2c3764d85.js"></script>
+<script src="https://gist.github.com/bentyeh/9404b48aab739308751ebcf64150c42f.js"></script>
