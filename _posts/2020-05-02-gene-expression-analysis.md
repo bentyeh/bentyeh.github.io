@@ -4,7 +4,7 @@ layout: post
 use_toc: true
 use_math: true
 excerpt: Why is the negative binomial distribution used to model sequencing read counts? What do FPKM and TPM mean? What are common models of differential gene expression and pathway analysis?
-last_updated: 2020-05-21
+last_updated: 2020-06-08
 ---
 
 $$
@@ -107,7 +107,7 @@ Consider a sequencing run that samples $$n$$ of those transcripts (i.e., $$n$$ i
 
 Let $$k_i$$ be the observed read counts of gene $$i$$.
 
-| Model             | $$\text{Binomial}(n, p_i)$$   | $$\text{Poi}(\lambda_i = np_i)$$ | $$\text{NB}(r_i, \phi_i) = \text{Poi}(n P_i), P_i \sim \text{Gamma}(a = r_i, \theta = \frac{1-\phi_i}{n\phi_i})$$ |
+| Model             | $$\text{Binom}(n, p_i)$$      | $$\text{Poi}(\lambda_i = np_i)$$ | $$\text{NB}(r_i, \phi_i) = \text{Poi}(n P_i), P_i \sim \text{Gamma}(a = r_i, \theta = \frac{1-\phi_i}{n\phi_i})$$ |
 | ----------------- | --------------------------- | ------------------------------ | -------------------------------------------------------------------------------------------------------- |
 | $$\mathbb{E}(k_i)$$ | $$np_i$$                      | $$\lambda_i = np_i$$             | $$\frac{r_i(1-\phi_i)}{\phi_i} = n a \theta = n \mathbb{E}(P_i)$$
 | $$\text{Var}(k_i)$$ | $$np_i (1-p_i) \approx np_i$$ | $$\lambda_i = np_i$$             | $$\frac{r_i(1-\phi_i)}{\phi_i^2} = a n \theta + a n^2 \theta^2 = \frac{n \mathbb{E}(P_i)}{\phi_i}$$
@@ -133,135 +133,9 @@ Negative binomial interpretation
 
 - Empirical evidence: Empirically, the variability of read counts is larger than the Binomial and Poisson distributions allows and is better approximated by a Negative Binomial distribution. [[DESeq paper]](#references) [[Bioramble blog]](#references)
 
-## Gene length-dependent models
-
-### Summary
-
-Symbols
-- $$X_t$$: number of reads or fragments mapping to transcript $$t$$
-- $$N = \sum_{t \in T} X_t$$: total number of mapped reads
-- $$\tilde{l}_t = l_t - m + 1$$: effective length of a transcript $$t$$, i.e., the number of positions in a transcript in which a read of length $$m$$ can start
-- $$p_t = \frac{m_t}{\sum_{t \in T} m_t}$$: relative abundance of transcript $$t$$, where $$m_t$$ is the copy number of transcript $$t$$ in the sample
-  - $$M = \sum_{t \in T} m_t$$ generally cannot be inferred from sequencing data but can be measured using qPCR.
-
-|                                                                | RPKM                                               | FPKM                                                    | TPM                        | 
-|----------------------------------------------------------------|----------------------------------------------------|---------------------------------------------------------|----------------------------| 
-| Acronym                                                        | reads per kilobase per millions of reads mapped    | fragments per kilobase per per millions of reads mapped | transcripts per million    | 
-| Formula                                                        | $$\frac{X_t}{(N / {10}^6)(\tilde{l}_t / {10}^3)}$$ | $$\frac{X_t}{(N / {10}^6)(\tilde{l}_t / {10}^3)}$$      | $$\hat{p}_t \cdot {10}^6$$ | 
-| Comparable across experiments                                  | Bad                                                | Bad                                                     |      Not great                  | 
-| Value for 1 transcript per sample (i.e., $$p_t = \frac{1}{M}$$) | ~10 [[Pachter's blog post]](#references)            | ~10                                                     | $$\frac{ {10}^6}{M}$$        | 
-
-[]()
-
-For a brief comparison of the three metrics, consider
-1. [Harold Pimentel's blog post](https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/)
-2. [Lior Pachter's 2013 CSHL Keynote](https://youtu.be/5NiFibnbE8o?t=1832)
-
-<details markdown="block"><summary>Derivation</summary>
-
-Definitions
-- A **transcript** $$t$$ is a unique sequence (strand) of mRNA corresponding to a gene isoform. It is characterized by a length $$l_t$$.
-- The physical copies of transcripts that are sequenced are called **fragments**.
-- A **read** $$f$$ is characterized by the its length, the fragment it came from (and consequently the transcript it maps to), and the position it maps to in the transcript.
-
-Model (from [[Pachter's arXiv article]](#references))
-- $$T$$: set of transcripts (mRNA isoform molecules; equivalently, the cDNA molecules reverse transcribed from such mRNA isoform molecules)
-- $$F$$: set of reads from a sequencing run
-  - $$F_t = \{f: f \in_\text{map} t\} \subseteq F$$: the set of reads mapping to transcript $$t \in T$$
-    - We define the operator $$f \in_\text{map} t$$ to mean that read $$f$$ maps to transcript $$t$$.
-    - $$X_t = \lvert F_t \rvert$$: number of reads mapping to transcript $$t$$
-  - $$N = \lvert F \rvert = \sum_{t \in T} X_t$$: total number of mapped reads
-  - $$m$$: fixed length of all reads
-- $$\tilde{l}_t = l_t - m + 1$$: effective length of a transcript $$t \in T$$, i.e., the number of positions in a transcript in which a read of length $$m$$ can start
-- $$p_t$$: relative abundance of transcript $$t$$, i.e., the proportion of all mRNA molecules corresponding to transcript $$t$$
-  - []()$$\sum_{t \in T} p_t = 1$$
-- $$\alpha_t = P(f \in_\text{map} t)$$: probability of selecting a read from transcript $$t$$
-
-We model the observation of a particular read $$f$$ that maps to some position $$\gamma$$ in transcript $$t$$ as a generative sequence of probabilistic events:
-1. Choose the transcript $$t$$ from which to select a read $$f$$
-
-   $$P(f \in_\text{map} t) = \alpha_t = \frac{p_t \tilde{l}_t}{\sum_{r \in T} p_r \tilde{l}_r}$$
-
-   Observe that
-   - []()$$\sum_{t \in T} \alpha_t = 1$$
-   - $$\alpha_t \neq p_t$$ because $$\alpha_t$$ accounts for transcript lengths.
-   - $$p_t$$ can be expressed in terms of $$\alpha$$ (see [[Pachter's arXiv article]](#references)): $$p_t = \frac{\alpha_t / \tilde{l}_t}{\sum_{r \in T} \alpha_r / \tilde{l}_r}$$
-2. Choose a position uniformly at random from among $$\tilde{l}_t = l_t - m + 1$$ possible positions to begin the read
-
-   $$P(f \mid f \in_\text{map} t) = \frac{1}{\tilde{l}_t}$$
-
-The likelihood of observing the reads $$F$$ as a function of the parameters $$\alpha$$ (or equivalently, the parameters $$p$$) is
-
-$$\begin{aligned}
-L(\alpha)
-&= \prod_{f \in F} P(f)
- = \prod_{t \in T} \prod_{f \in F_t} P(f)
- = \prod_{t \in T} \prod_{f \in F_t} P(f \in_\text{map} t) P(f \mid f \in_\text{map} t) \\
-&= \prod_{t \in T} \prod_{f \in F_t} \frac{\alpha_t}{\tilde{l}_t}
- = \prod_{t \in T} \left(\frac{\alpha_t}{\tilde{l}_t} \right)^{X_t} \\
-\rightarrow l(\alpha)
-&= \log L(\alpha) = \sum_{t \in T} X_t \left(\log \alpha_t - \log \tilde{l}_t \right)
-\end{aligned}$$
-
-The maximum likelihood estimate for $$\alpha_t$$ can be found by building the Lagrangian and setting its derivative to zero.
-
-$$\begin{aligned}
-\mathcal{L}(\alpha) &= L(\alpha) + \beta \sum_{t \in T} \alpha_t \\
-0 &= \frac{\partial\mathcal{L}}{\partial \alpha_t} = \frac{X_t}{\alpha_t} + \beta
-  \rightarrow \alpha_t = -\frac{X_t}{\beta} \\
-1 &= \sum_{t \in T} \alpha_t = \sum_{t \in T} -\frac{X_t}{\beta}
-  \rightarrow \beta = - \sum_{t \in T} X_t = - N \\
-\Rightarrow \hat{\alpha_t} &= \frac{X_t}{N}
-\end{aligned}$$
-
-Finally,
-
-$$\begin{aligned}
-\hat{p}_t
-&= \frac{\hat{\alpha}_t / \tilde{l}_t}{\sum_{r \in T} \hat{\alpha}_r / \tilde{l}_r}
- = \frac{X_t}{N \tilde{l}_t} \frac{1}{ {\sum_{r \in T} \frac{X_r}{N \tilde{l}_r}}}
- = \frac{X_t}{(N / {10}^6)(\tilde{l}_t / {10}^3)} \frac{ {10}^{-9}}{ {\sum_{r \in T} \frac{X_r}{N \tilde{l}_r}}} \\
-&= \text{RPKM}_t \cdot \frac{N \cdot {10}^{-9}}{ {\sum_{r \in T} \frac{X_r}{\tilde{l}_r}}}
-\end{aligned}$$
-
-where (equivalent ways of expressing RPKM)
-
-$$
-\text{RPKM}_t
-= \frac{X_t}{(N / {10}^6)(\tilde{l}_t / {10}^3)}
-= \frac{\hat{\alpha}_t \cdot {10}^9}{\tilde{l}_t}
-= \frac{p_t \cdot {10}^9}{\sum_{r \in T} p_r \tilde{l}_r}
-$$
-
-Intepretation
-- RPKM is based on maximum likelihood estimates for $$\alpha$$, so it itself is an *estimate*.
-- The denomiator $$\sum_{r \in T} p_r \tilde{l}_r$$ is a weighted average of transcript lengths, where the weights are transcript abundances. While this is constant for a given experiment, it is *not* necessarily constant *across* experiments, since the transcript abundances $$p_r$$ are likely different. Hence, RPKM values are not truly comparable across experiments.
-  - Even the relative abundance values $$p_t$$ (and consequently TPM values) are not directly comparable across experiments, because the denominator changes across experiments
-
-    $$
-    \hat{p}_t
-    = \frac{\hat{\alpha}_t / \tilde{l}_t}{\sum_{r \in T} \hat{\alpha}_r / \tilde{l}_r}
-    = \frac{X_t / \tilde{l}_t}{\sum_{r \in T} X_r / \tilde{l}_r}
-    = \frac{\text{RPKM}_t}{\sum_{r \in T} \text{RPKM}_r}
-    $$
-
-    To build intuition for the lack of comparability, consider two samples that are identical, except that one gene (say, gene $$a$$) is completely knocked-out in sample 2. Because the relative abundance values $$\hat{p}_t$$ must sum to one (by construction), the relative abundance values in sample two will be higher than those in sample 1 for all genes except gene $$a$$, for which $$p_a = 0$$ in sample 2. See [below](#naive-normalization) for a similar example.
-  - The only rigorous solution is to spike in known quantities of artificial fragments into every sample and normalize based on counts of those transcripts.
-
-#### FPKM
-
-FPKM is a generalization of RPKM where a single fragment might yield multiple reads, e.g., in paired-end sequencing.
-> With paired-end RNA-seq, two reads can correspond to a single fragment, or, if one read in the pair did not map, one read can correspond to a single fragment. [[RNA-Seq blog]](https://www.rna-seqblog.com/rpkm-fpkm-and-tpm-clearly-explained/)
-
-Formally, consider a set of raw reads $$F'$$. Reads from the same fragment are treated as a single processed read to generate the set of processed reads $$F$$. With this pre-processing step, the formula for FPKM is identical to that of RPKM.
-
-</details>
-
 # Differential expression analysis
 
-## DESeq / DESeq2
-
-### Dataset
+## Dataset
 
 Dataset size
 - $$n$$: number of genes
@@ -272,8 +146,10 @@ Count matrix: $$K \in \mathbb{N}^{n \times m}$$
 - Rows: genes
 - Columns: samples
 - $$K_{ij}$$: number of sequencing reads mapped to gene $$i$$ in sample $$j$$
+  - When referring to the count matrix as a random variable (e.g., see the [DESeq2 model](#deseq2)), a capital letter $$K$$ is used. When referring to the observed count matrix (e.g., a real dataset), a lower-case $$k$$ is used.
+  - Let $$N_j = \sum_{i=1}^n k_{ij}$$ be the total number of mapped reads in sample $$j$$.
 
-#### Model (aka design) matrix
+### Model (aka design) matrix
 
 $$X \in \{0,1\}^{m \times c}$$
 - Rows: samples
@@ -316,37 +192,61 @@ $$\begin{aligned}
 &= \log_2 \frac{q_{i1} q_{i4}}{q_{i2} q_{i3}}
 \end{aligned}$$
 
-### Normalization
+## Normalization
 
-We want to estimate a sample-specific factor $$s_j$$ allowing us to compute normalized counts $$q_{ij} = \frac{\mathbb{E}(K_{ij})}{s_j}$$. Normalized counts can then be directly compared across samples.
+Raw alignment counts are often not directly comparable across samples or across genes due to the following biases:
+- library size (sequencing depth): larger library sizes result in higher counts for the entire sample.
+- uniquely high counts of a few genes can take up a large proportion of the sequencing "real estate," leading to relatively lower counts for the remaining genes. [[Robinson & Oshlack]](#references)
+- gene length: longer genes are more likely to be "sampled" (sequenced) by RNA-seq.
+  - This is an important concern when comparing the expression of different genes *within the same sample* (e.g., whether the expression of GLUT2 (glucose transporter 2) or GLUT4 (glucose transporter 4) higher in a particular sample).
+  - This is not a significant concern for differential gene expression analysis, since gene length should exert the same relative bias across samples.
 
-#### Naive normalization
+This article presents a few popular methods. The first three methods (naive normalization, median-of-ratios, and TMM) estimate a sample-specific factor $$s_j$$ yielding normalized counts $$q_{ij} = \frac{\mathbb{E}(K_{ij})}{s_j}$$ that can be compared *across* samples. There also exist methods for estimating sample- and *gene*-specific factors $$s_{ij}$$ such that $$q_{ij} = \frac{\mathbb{E}(K_{ij})}{s_{ij}}$$, but they are not discussed here. Additionally, spike-in controls (known quantities of artificial fragments) can be used to specifically address technical variability in library preparation and sequencing and are especially important when the assumption that the majority of the genes are not differentially expressed is invalid. However, spike-in controls may suffer from their own reliability issues and rely on the strict assumption that technical biases affect spike-ins in the same way as they do genes. [[Risso et al.]](#references) The gene-length dependent metrics (RPKM, FPKM, and TPM) estimate normalized proportions best used for comparisons *within* samples.
 
-Divide by the total number of sequencing reads of a sample.
+For further readings, consider the following review articles:
+- Dillies, M.-A. et al. A comprehensive evaluation of normalization methods for Illumina high-throughput RNA sequencing data analysis. *Briefings in Bioinformatics* 14, 671-83 (2013). [doi:10.1093/bib/bbs046](https://doi.org/10.1093/bib/bbs046).
+- Liu X. et al. Normalization Methods for the Analysis of Unbalanced Transcriptome Data: A Review. *Frontiers in Bioengineering and Biotechnology* 7 (2019). [doi:10.3389/fbioe.2019.00358](https://doi.org/fbioe.2019.00358).
 
-$$\hat{s}_j = \sum_{i=1}^n k_{ij}$$
+### Naive normalization
 
-Problem: This potentially reduces the power of the method to pick out differentially expressed genes, and in extreme cases, might lead to false positives. Consider the following dataset where gene C was knocked-out in sample 3. Using the normalized counts $$q_{ij}$$, one might erroneously conclude that genes A, B, D, and E are upregulated in sample 3 relative to samples 1 and 2.
+Assumptions / limitations
+- Only corrects for library size
+- Each gene in a sample is normalized by the same factor: $$s_{ij} = s_j$$
+
+Method: Divide by the total count of (mapped) sequencing reads of a sample, then multiply by the mean total count across all samples. The multiplication step ensures that the normalized values are counts (as assumed by [models](#model) like DESeq2) rather than proportions.
+
+$$\hat{s}_j = \frac{N_j}{\bar{N}}, \quad \bar{N} = \frac{1}{m} \sum_{j=1}^m N_j = \frac{1}{m} \sum_{i=1}^n \sum_{j=1}^m k_{ij}$$
+
+Problem: This potentially reduces the power of the method to pick out differentially expressed genes, and in extreme cases, might lead to false positives. Consider the following dataset where gene C is knocked-out in sample 3. Using the normalized counts $$q_{ij}$$, one might erroneously conclude that genes A, B, D, and E are upregulated in sample 3 relative to samples 1 and 2.
 
 | gene          | sample 1 | sample 2 | sample 3 | $$q_{i1}$$ | $$q_{i2}$$ | $$q_{i3}$$ | 
 |---------------|----------|----------|----------|------------|------------|------------| 
-| A             | 100      | 90       | 125      | 1/15       | 1/15       | 1.25/15    | 
-| B             | 200      | 180      | 250      | 2/15       | 2/15       | 2.5/15     | 
-| C             | 300      | 270      | 0        | 3/15       | 3/15       | 0          | 
-| D             | 400      | 360      | 500      | 4/15       | 4/15       | 5/15       | 
-| E             | 500      | 450      | 625      | 5/15       | 5/15       | 6.25/15    | 
+| A             | 100      | 90       | 125      | 96.7       | 96.7       | 120.8      | 
+| B             | 200      | 180      | 250      | 193.3      | 193.3      | 241.7      | 
+| C             | 300      | 270      | 0        | 290        | 290        | 0          | 
+| D             | 400      | 360      | 500      | 386.7      | 386.7      | 483.3      | 
+| E             | 500      | 450      | 625      | 483.3      | 483.3      | 604.2      | 
 | Total         | 1500     | 1350     | 1500     |            |            |            |
-| $$\hat{s}_j$$ | 1500     | 1350     | 1500     |            |            |            |
+| $$\hat{s}_j$$ | 1.03     | 0.93     | 1.03     |            |            |            |
 
-[]()
+More robust alternatives to normalizing to the total count include normalizing to the upper quartile (75th percentile) or median (50th percentile) of nonzero counts.
 
-#### Median-of-ratios
+### Median-of-ratios
 
-Consider a pseudo-reference sample $$K^R$$ whose counts for each gene are obtained by taking the geometric mean across samples. The size factor $$\hat{s}_j$$ for sample $$j$$ is computed as the median of the ratios of the $$j$$-th sample's counts to those of the pseudo-reference:
+This is the default normalization method in DESeq and DESeq2 (`DESeq2::estimateSizeFactors()`).
 
-$$\hat{s}_j = \text{median}_{i: K_i^R > 0} \frac{K_{ij}}{K_i^R}, \quad K_i^R = \left(\prod_{j=1}^m K_{ij} \right)^\frac{1}{m}$$
+Assumptions / limitations
+- Corrects for library size and uniquely high counts
+- Most genes are not differentially expressed
 
-Using the same example, the normalized counts of genes A, B, D, and E are the same across samples 1, 2, and 3, as desired.
+Method: Consider a pseudo-reference sample $$K^R$$ whose counts for each gene are obtained by taking the geometric mean across samples. The size factor $$\hat{s}_j$$ for sample $$j$$ is computed as the median of the ratios of the $$j$$-th sample's counts to those of the pseudo-reference:
+
+$$
+\hat{s}_j = \text{median}_{i: K_i^R > 0} \frac{K_{ij}}{K_i^R}, \quad
+K_i^R = \left(\prod_{j=1}^m K_{ij} \right)^\frac{1}{m} = \exp\left(\frac{1}{m} \sum_{j=1}^m \log K_{ij} \right)
+$$
+
+Example: Using the same example as above, the normalized counts of genes A, B, D, and E are the same across samples 1, 2, and 3, as desired.
 
 | gene        | sample 1 | sample 2 | sample 3 | $$K_i^R$$ | $$\frac{K_{i1}}{K_i^R}$$ | $$\frac{K_{i2}}{K_i^R}$$ | $$\frac{K_{i3}}{K_i^R}$$ | $$q_{i,1}$$ | $$q_{i,2}$$ | $$q_{i,3}$$ | 
 |-------------|----------|----------|----------|---------|------------------------|------------------------|------------------------|-----------|-----------|-----------| 
@@ -360,7 +260,231 @@ Using the same example, the normalized counts of genes A, B, D, and E are the sa
 
 []()
 
-### Model
+### Trimmed mean of M values (TMM)
+
+This is the default normalization method in the edgeR R package (`edgeR::calcNormFactors()`).
+
+> A trimmed mean is the average after removing the upper and lower x% of the data. The TMM procedure is doubly trimmed, by log-fold-changes $$M_{ij}^r$$ (sample $$j$$ relative to sample $$r$$ for gene $$i$$) and by absolute intensity ($$A_i$$). By default, we trim the $$M_i$$ values by 30% and the $$A_i$$ values by 5%. [[Adapted from Robinson & Oshlack]](#references)
+
+Symbols
+- $$M_{ij}^r = \log_2 \frac{K_{ij} / N_j}{K_{ir} / N_r}$$: gene-wise log-fold changes (sample $$j$$ relative to sample $$r$$ for gene $$i$$)
+- $$A_{ij}^r = \log_2 \sqrt{\frac{K_{ij} \cdot K_{ir}}{N_j \cdot N_r}}$$: absolute expression (log-geometric mean of expression in samples $$j$$ and $$r$$)
+
+Let $$M^*$$ and $$A^*$$ be the percentile thresholds for trimming genes by log-fold change and by absolute expression, respectively. For RNA-seq, [Robinson & Oshlack](#references) propose default values of $$M^* = 30$$ and $$A^* = 5$$. Let $$\mathcal{Q}$$ be the quantile function, i.e., $$\mathcal{Q}(v, p)$$ returns the $$p$$th quantile of vector $$v$$. Then, the set of untrimmed genes is 
+
+$$\begin{aligned}
+I^* = \{i \mid
+&\left(\mathcal{Q}(M_{\bullet j}^r, M^*) < M_{ij}^r < \mathcal{Q}(M_{\bullet j}^r, 100 - M^*)\right) \wedge \\
+&\left(\mathcal{Q}(A_{\bullet j}^r, A^*) < A_{ij}^r < \mathcal{Q}(A_{\bullet j}^r, 100 - A^*)\right) \wedge \\
+&\left(k_{ij}, k_{ir} > 0 \right)
+\}
+\end{aligned}$$
+
+Finally, the size factors are calculated as
+
+$$\log_2 \hat{s}_j = \frac{\sum_{i \in I^*} w_{ij}^r M_{ij}^r}{\sum_{i \in I^*} w_{ij}^r}$$
+
+where the weights are the inverse of estimated asymptotic variances
+
+$$
+w_{ij}^r
+\approx \frac{1}{\mathrm{Var}(M_{ij}^r)}
+\propto \left(\frac{N_j - K_{ij}}{N_j K_{ij}} + \frac{N_r - K_{ir}}{N_r K_{ir}} \right)^{-1}
+$$
+
+<span style="color: red">In the edgeR [source code](https://rdrr.io/bioc/edgeR/src/R/calcNormFactors.R), the size factor produced by the [median-of-ratios method](#median-of-ratios) is further divided by the library size, but the TMM size factor is not. Why?</span>
+
+<details markdown="block"><summary>Derivation</summary>
+
+If the mean of $$K_{ij}$$ is known, the variance of $$M_{ij}^r$$ can be estimated using the [delta method](https://en.wikipedia.org/wiki/Delta_method).
+
+Let
+
+$$M_{ij}^r = g(K_{ij}, K_{ir}) = \log_2 \frac{K_{ij} / N_j}{K_{ir} / N_r}$$
+
+Linearizing $$g(K_{ij}, K_{ir})$$ around $$\mathbb{E}(K_{ij}) = \mu_{ij}$$ and $$\mathbb{E}(K_{ir}) = \mu_{ir}$$ gives
+
+$$
+M_{ij}^r
+= g(K_{ij}, K_{ir})
+\approx g(\mu_{ij}, \mu_{ir}) + (K_{ij} - \mu_{ij}) \frac{\partial}{\partial K_{ij}} g(\mu_{ij}, \mu_{ir}) + (K_{ir} - \mu_{ir}) \frac{\partial}{\partial K_{ir}} g(\mu_{ij}, \mu_{ir})
+$$
+
+with
+
+$$\begin{gathered}
+\frac{\partial}{\partial K_{ij}} g(\mu_{ij}, \mu_{ir}) = \frac{1}{\mu_{ij} \ln 2} \\
+\frac{\partial}{\partial K_{ir}} g(\mu_{ij}, \mu_{ir}) = -\frac{1}{\mu_{ir} \ln 2}
+\end{gathered}$$
+
+so
+
+<!-- $$\begin{aligned}
+\mathbb{E}(M_{ij}^r)
+&\approx \mathbb{E}\left(g(\mu_{ij}, \mu_{ir}) + (K_{ij} - \mu_{ij}) \frac{\partial}{\partial K_{ij}} g(\mu_{ij}, \mu_{ir}) + (K_{ir} - \mu_{ir}) \frac{\partial}{\partial K_{ir}} g(\mu_{ij}, \mu_{ir}) \right) \\
+&= g(\mu_{ij}, \mu_{ir}) + \frac{\partial}{\partial K_{ij}} g(\mu_{ij}, \mu_{ir}) \underbrace{\mathbb{E}(K_{ij} - \mu_{ij})}_{0} + \frac{\partial}{\partial K_{ir}} g(\mu_{ij}, \mu_{ir}) \underbrace{\mathbb{E}(K_{ir} - \mu_{ir})}_{0} \\
+&= g(\mu_{ij}, \mu_{ir})
+\end{aligned}$$ -->
+
+$$\begin{aligned}
+\mathrm{Var}(M_{ij}^r)
+&\approx \mathrm{Var}\left( g(\mu_{ij}, \mu_{ir}) + (K_{ij} - \mu_{ij}) \frac{\partial}{\partial K_{ij}} g(\mu_{ij}, \mu_{ir}) + (K_{ir} - \mu_{ir}) \frac{\partial}{\partial K_{ir}} g(\mu_{ij}, \mu_{ir}) \right) \\
+&= 0 + \left[\frac{\partial}{\partial K_{ij}} g(\mu_{ij}, \mu_{ir}) \right]^2 \mathrm{Var}(K_{ij} - \mu_{ij}) + \left[\frac{\partial}{\partial K_{ir}} g(\mu_{ij}, \mu_{ir}) \right]^2 \mathrm{Var}(K_{ir} - \mu_{ir}) \\
+&= \left[\frac{\partial}{\partial K_{ij}} g(\mu_{ij}, \mu_{ir}) \right]^2 \mathrm{Var}(K_{ij}) + \left[\frac{\partial}{\partial K_{ir}} g(\mu_{ij}, \mu_{ir}) \right]^2 \mathrm{Var}(K_{ir}) \\
+&= \frac{1}{\mu_{ij}^2 (\ln 2)^2} \mathrm{Var}(K_{ij}) + \frac{1}{\mu_{ir}^2 (\ln 2)^2} \mathrm{Var}(K_{ir})
+\end{aligned}$$
+
+where the first equality assumes no covariance term between $$K_{ij}$$ and $$K_{ir}$$.
+
+[Robinson & Oshlack](#references) assume $$K_{ij} \sim \text{Binom}(N_j, p_{ij})$$ (so $$\mu_{ij} = N_j p_{ij}$$), giving
+
+$$\begin{aligned}
+\mathrm{Var}(M_{ij}^r)
+&\approx \frac{1}{N_j^2 p_{ij}^2 (\ln 2)^2} (N_j p_{ij} (1 - p_{ij})) + \frac{1}{N_r^2 p_{ir}^2 (\ln 2)^2} (N_r p_{ir} (1 - p_{ir})) \\
+&= \frac{1}{(\ln 2)^2} \left(\frac{1 - p_{ij}}{N_j p_{ij}} + \frac{1 - p_{ir}}{N_r p_{ir}} \right) \\
+&= \frac{1}{(\ln 2)^2} \left(\frac{N_j - N_j p_{ij}}{N_j N_j p_{ij}} + \frac{N_r - N_r p_{ir}}{N_r N_r p_{ir}} \right) \\
+&\approx \frac{1}{(\ln 2)^2} \left(\frac{N_j - K_{ij}}{N_j K_{ij}} + \frac{N_r - K_{ir}}{N_r K_{ir}} \right)
+\end{aligned}$$
+
+The $$(\ln 2)^2$$ factors can be dropped from the weights because they would cancel between the weights in the numerator and the denominator in the size factors equation.
+
+Note that other distributions (e.g., negative binomial, Poisson) can be assumed for $$K_{ij}$$ and would yield different values for $$\mathrm{Var}(K_{ij})$$ and consequently $$\mathrm{Var}(M_{ij}^r)$$.
+
+<!-- If we assume $$K_{ij} \sim \text{NB}(\mu_{ij}, \alpha_i)$$, then
+
+$$\begin{aligned}
+\mathrm{Var}(M_{ij}^r)
+&\approx \frac{1}{\mu_{ij}^2 (\ln 2)^2} (\mu_{ij} + \alpha_i \mu_{ij}^2) + \frac{1}{\mu_{ir}^2 (\ln 2)^2} (\mu_{ir} + \alpha_i \mu_{ir}^2) \\
+&= \frac{1 + \alpha_i \mu_{ij}}{\mu_{ij} (\ln 2)^2} + \frac{1 + \alpha_i \mu_{ir}}{\mu_{ir} (\ln 2)^2}
+\end{aligned}$$
+
+If we assume $$K_{ij} \sim \text{Poi}(\mu_{ij})$$, then
+
+$$\begin{aligned}
+\mathrm{Var}(M_{ij}^r)
+&\approx \frac{1}{\mu_{ij}^2 (\ln 2)^2} (\mu_{ij}) + \frac{1}{\mu_{ir}^2 (\ln 2)^2} (\mu_{ir}) \\
+&= \frac{1}{(\ln 2)^2} \left(\frac{1}{\mu_{ij}} + \frac{1}{\mu_{ir}} \right) \\
+&= \frac{1}{(\ln 2)^2} \frac{\mu_{ij} + \mu_{ir}}{\mu_{ij} \mu_{ir}}
+\end{aligned}$$ -->
+
+</details>
+
+### Gene length-dependent metrics
+
+Symbols
+- $$X_t$$: number of reads or fragments mapping to transcript $$t$$
+- $$N = \sum_{t \in T} X_t$$: total number of mapped reads
+- $$\tilde{l}_t = l_t - m + 1$$: effective length of a transcript $$t$$, i.e., the number of positions in a transcript in which a read of length $$m$$ can start
+- $$p_t = \frac{m_t}{\sum_{t \in T} m_t}$$: relative abundance of transcript $$t$$, where $$m_t$$ is the copy number of transcript $$t$$ in the sample
+  - $$M = \sum_{t \in T} m_t$$ generally cannot be inferred from sequencing data <span style="color:red">but can be measured using qPCR?</span>
+
+|                                | RPKM                                               | FPKM                                                | TPM                     | 
+|--------------------------------|----------------------------------------------------|-----------------------------------------------------|-------------------------| 
+| Acronym                        | reads per kilobase per million mapped reads        | fragments per kilobase per per million mapped reads | transcripts per million | 
+| Formula                        | $$\frac{X_t}{(N / {10}^6)(\tilde{l}_t / {10}^3)}$$ | $$\frac{X_t}{(N / {10}^6)(\tilde{l}_t / {10}^3)}$$  | $${10}^6 \hat{p}_t = 10^6 \frac{X_t / \tilde{l}_t}{\sum_{r \in T} X_r / \tilde{l}_r}$$ | 
+| Comparable across experiments* | No                                                 | No                                                  | Yes                     | 
+
+*RPKM and FPKM values are not comparable across samples because they do not sum (over all unique transcripts in a sample) to a fixed value: $$\sum_{t \in T} \text{RPKM}_t$$ is not constant. By normalizing to total effective (with respect to gene length) number of mapped reads instead of total number of mapped reads $$N$$, TPM always sums to $$10^6$$ for a given sample. Note that an equivalent estimate of relative abundance is $$\hat{p}_t = \frac{\text{RPKM}_t}{\sum_{r \in T} \text{RPKM}_r}$$.
+- Since RPKM and FPKM are not comparable across samples, there is not a defined value corresponding to 1 transcript per sample. However, as a very rough estimate, values in the range of 1-10 have been suggested. [[Pachter's blog post]](#references) By definition, a relative abundance value $$p_t = \frac{1}{M}$$ (or a TPM of $$\frac{ {10}^6 }{M}$$) corresponds to 1 transcript per sample.
+
+However, even the relative abundance values $$p_t$$ (and consequently TPM values) are not necessarily comparable across experiments due to the potential bias introduced by high counts of a few genes, as explored in the example in the [naive normalization section](#naive-normalization). In short, consider samples 1 and 2 that are identical, except that one gene (say, gene C) is completely knocked-out in sample 2. Because the relative abundance values $$\hat{p}_t$$ sum to one (by construction), the relative abundance values in sample 2 will be higher than those in sample 1 for all genes except gene C, for which $$p_C = 0$$ in sample 2.
+
+For a brief comparison of the three metrics, consider
+1. [Harold Pimentel's blog post](https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/)
+2. [Lior Pachter's 2013 CSHL Keynote](https://youtu.be/5NiFibnbE8o?t=1832)
+
+<details markdown="block"><summary>Derivation</summary>
+
+Definitions
+- A **transcript** $$t$$ is a unique sequence (strand) of mRNA corresponding to a gene isoform. It is characterized by a length $$l_t$$.
+- The physical copies of transcripts that are sequenced are called **fragments**.
+- A **read** $$f$$ is characterized by the its length, the fragment it came from (and consequently the transcript it maps to), and the position it maps to in the transcript.
+
+Model (from [[Pachter's arXiv article]](#references))
+- $$T$$: set of transcripts (mRNA isoform molecules; equivalently, the cDNA molecules reverse transcribed from such mRNA isoform molecules)
+- $$F$$: set of reads from a sequencing run
+  - $$F_t = \{f: f \in_\text{map} t\} \subseteq F$$: the set of reads mapping to transcript $$t \in T$$
+    - We define the operator $$f \in_\text{map} t$$ to mean that read $$f$$ maps to transcript $$t$$.
+    - $$X_t = \lvert F_t \rvert$$: number of reads mapping to transcript $$t$$
+  - $$N = \lvert F \rvert = \sum_{t \in T} X_t$$: total number of mapped reads
+  - $$m$$: fixed length of all reads
+- $$\tilde{l}_t = l_t - m + 1$$: effective length of a transcript $$t \in T$$, i.e., the number of positions in a transcript in which a read of length $$m$$ can start
+- $$p_t$$: relative abundance of transcript $$t$$, i.e., the proportion of all mRNA molecules corresponding to transcript $$t$$
+  - By construction, $$\sum_{t \in T} p_t = 1$$.
+- $$\alpha_t = P(f \in_\text{map} t) = \frac{p_t \tilde{l}_t}{\sum_{r \in T} p_r \tilde{l}_r}$$: probability of selecting a read from transcript $$t$$
+  - By construction, $$\sum_{t \in T} \alpha_t = 1$$.
+  - $$\alpha_t \neq p_t$$ because $$\alpha_t$$ accounts for transcript lengths.
+  - Note that $$p_t$$ can be expressed in terms of $$\alpha$$
+
+    $$\begin{aligned}
+    p_t
+    &= \frac{\frac{p_t}{\sum_{r \in T} p_r \tilde{l}_r}}{\frac{1}{\sum_{t' \in T} p_{t'} \tilde{l}_{t'}}}
+      = \frac{\frac{p_t}{\sum_{r \in T} p_r \tilde{l}_r}}{\frac{\sum_{r \in T} p_r}{\sum_{t' \in T} p_{t'} \tilde{l}_{t'}}} \\
+    &= \frac{\frac{p_t}{\sum_{r \in T} p_r \tilde{l}_r}}{\sum_{r \in T} \frac{p_r}{\sum_{t' \in T} p_{t'} \tilde{l}_{t'}}}
+      = \frac{\frac{p_t \tilde{l}_t}{\sum_{r \in T} p_r \tilde{l}_r} / \tilde{l}_t}{\sum_{r \in T} \frac{p_r \tilde{l}_r}{\sum_{t' \in T} p_{t'} \tilde{l}_{t'}} / \tilde{l}_r} \\
+    &= \frac{\alpha_t / \tilde{l}_t}{\sum_{r \in T} \alpha_r / \tilde{l}_r}
+    \end{aligned}$$
+
+We model the observation of a particular read $$f$$ that maps to some position $$\gamma$$ in transcript $$t$$ as a generative sequence of probabilistic events:
+1. Choose the transcript $$t$$ from which to select a read $$f$$: $$P(f \in_\text{map} t) = \alpha_t$$.
+2. Choose a position uniformly at random from among $$\tilde{l}_t = l_t - m + 1$$ possible positions to begin the read: $$P(f \mid f \in_\text{map} t) = \frac{1}{\tilde{l}_t}$$
+
+The likelihood of observing the reads $$F$$ as a function of the parameters $$\alpha$$ (or equivalently, the parameters $$p$$) is
+
+$$\begin{aligned}
+L(\alpha)
+&= \prod_{f \in F} P(f)
+ = \prod_{t \in T} \prod_{f \in F_t} P(f)
+ = \prod_{t \in T} \prod_{f \in F_t} P(f \in_\text{map} t) P(f \mid f \in_\text{map} t) \\
+&= \prod_{t \in T} \prod_{f \in F_t} \frac{\alpha_t}{\tilde{l}_t}
+ = \prod_{t \in T} \left(\frac{\alpha_t}{\tilde{l}_t} \right)^{X_t} \\
+\rightarrow l(\alpha)
+&= \log L(\alpha) = \sum_{t \in T} X_t \left(\log \alpha_t - \log \tilde{l}_t \right)
+\end{aligned}$$
+
+The maximum likelihood estimate for $$\alpha_t$$ can be found by building the Lagrangian and setting its derivative to zero.
+
+$$\begin{aligned}
+\mathcal{L}(\alpha) &= L(\alpha) + \beta \sum_{t \in T} \alpha_t \\
+0 &= \frac{\partial\mathcal{L}}{\partial \alpha_t} = \frac{X_t}{\alpha_t} + \beta
+  \rightarrow \alpha_t = -\frac{X_t}{\beta} \\
+1 &= \sum_{t \in T} \alpha_t = \sum_{t \in T} -\frac{X_t}{\beta}
+  \rightarrow \beta = - \sum_{t \in T} X_t = - N \\
+\Rightarrow \hat{\alpha_t} &= \frac{X_t}{N}
+\end{aligned}$$
+
+Finally,
+
+$$\begin{aligned}
+\hat{p}_t
+&= \frac{\hat{\alpha}_t / \tilde{l}_t}{\sum_{r \in T} \hat{\alpha}_r / \tilde{l}_r}
+ = \frac{\frac{X_t}{N \tilde{l}_t}}{ {\sum_{r \in T} \frac{X_r}{N \tilde{l}_r}}}
+ = \frac{X_t}{(N / {10}^6)(\tilde{l}_t / {10}^3)} \frac{ {10}^{-9}}{ {\sum_{r \in T} \frac{X_r}{N \tilde{l}_r}}} \\
+&= \text{RPKM}_t \cdot \frac{N \cdot {10}^{-9}}{ {\sum_{r \in T} \frac{X_r}{\tilde{l}_r}}}
+\end{aligned}$$
+
+where (equivalent ways of expressing RPKM)
+
+$$
+\text{RPKM}_t
+= \frac{X_t}{(N / {10}^6)(\tilde{l}_t / {10}^3)}
+= \frac{\hat{\alpha}_t \cdot {10}^9}{\tilde{l}_t}
+= \frac{p_t \cdot {10}^9}{\sum_{r \in T} p_r \tilde{l}_r}
+$$
+
+Intepretation
+- RPKM is based on maximum likelihood estimates for $$\alpha$$, so it itself is an *estimate*.
+- The denominator $$\sum_{r \in T} p_r \tilde{l}_r$$ is a weighted average of transcript lengths, where the weights are transcript abundances. While this is constant for a given experiment, it is *not* constant *across* experiments, since the transcript abundances $$p_r$$ are likely different. Hence, RPKM values are not comparable across experiments.
+- FPKM is a generalization of RPKM where a single fragment might yield multiple reads, e.g., in paired-end sequencing.
+  > With paired-end RNA-seq, two reads can correspond to a single fragment, or, if one read in the pair did not map, one read can correspond to a single fragment. [[RNA-Seq blog]](https://www.rna-seqblog.com/rpkm-fpkm-and-tpm-clearly-explained/)
+  
+  Formally, consider a set of raw reads $$F'$$. Reads from the same fragment are treated as a single processed read to generate the set of processed reads $$F$$. With this pre-processing step, the formula for FPKM is identical to that of RPKM.
+
+</details>
+
+## Model
+
+### DESeq2
 
 Generalized linear model (GLM) with logarithmic link
 
@@ -620,38 +744,40 @@ $$
 
 # References
 
-1. Robinson, M. D. & Oshlack, A. A scaling normalization method for differential expression analysis of RNA-seq data. *Genome Biol* 11, R25 (2010). [doi:10.1186/gb-2010-11-3-r25](https://doi.org/10.1186/gb-2010-11-3-r25).
+1. Robinson, M. D. & Oshlack, A. A scaling normalization method for differential expression analysis of RNA-seq data. *Genome Biology* 11, R25 (2010). [doi:10.1186/gb-2010-11-3-r25](https://doi.org/10.1186/gb-2010-11-3-r25).
    - > Depending on the experimental situation, Poisson seems appropriate for technical replicates and Negative Binomial may be appropriate for the additional variation observed from biological replicates.
-   - Presents a library count [normalization](#normalization) method "trimmed mean of M values" (TMM).
-2. Lipp, J. Why sequencing data is modeled as negative binomial. *Bioramble* (2016). [https://bioramble.wordpress.com/2016/01/30/why-sequencing-data-is-modeled-as-negative-binomial/](https://bioramble.wordpress.com/2016/01/30/why-sequencing-data-is-modeled-as-negative-binomial/).
-3. Anders, S. & Huber, W. Differential expression analysis for sequence count data. *Genome Biol* 11, R106 (2010). [doi:10.1186/gb-2010-11-10-r106](https://doi.org/10.1186/gb-2010-11-10-r106).
+   - Presents the ["trimmed mean of M values" (TMM) library count normalization method](#trimmed-mean-of-m-values-tmm).
+2. Risso, D. et al. Normalization of RNA-seq data using factor analysis of control genes or samples. *Nature Biotechnology* 32, 896–902 (2014). [doi:10.1038/nbt.2931](https://doi.org/10.1038/nbt.2931)
+   - Explores the reliability of spike-in controls and presents a normalization strategy remove unwanted variation (RUV) (not explained here).
+3. Lipp, J. Why sequencing data is modeled as negative binomial. *Bioramble* (2016). [https://bioramble.wordpress.com/2016/01/30/why-sequencing-data-is-modeled-as-negative-binomial/](https://bioramble.wordpress.com/2016/01/30/why-sequencing-data-is-modeled-as-negative-binomial/).
+4. Anders, S. & Huber, W. Differential expression analysis for sequence count data. *Genome Biology* 11, R106 (2010). [doi:10.1186/gb-2010-11-10-r106](https://doi.org/10.1186/gb-2010-11-10-r106).
    - DESeq paper.
-4. Love, M. I., Huber, W. & Anders, S. Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. *Genome Biol* 15, 550 (2014). [doi:10.1186/s13059-014-0550-8](https://doi.org/10.1186/s13059-014-0550-8).
+5. Love, M. I., Huber, W. & Anders, S. Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. *Genome Biol* 15, 550 (2014). [doi:10.1186/s13059-014-0550-8](https://doi.org/10.1186/s13059-014-0550-8).
    - DESeq2 paper.
-5. Love, M. I., Anders, S. & Huber, W. Analyzing RNA-seq data with DESeq2. [https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html) (2020).
+6. Love, M. I., Anders, S. & Huber, W. Analyzing RNA-seq data with DESeq2. [https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html) (2020).
    - DESeq2 vignette.
-6. Pachter, L. Models for transcript quantification from RNA-Seq. *arXiv*:1104.3889 [q-bio, stat] (2011). [http://arxiv.org/abs/1104.3889](http://arxiv.org/abs/1104.3889).
+7. Pachter, L. Models for transcript quantification from RNA-Seq. *arXiv*:1104.3889 [q-bio, stat] (2011). [http://arxiv.org/abs/1104.3889](http://arxiv.org/abs/1104.3889).
    - Derives general likelihood model for RNA-seq reads, likelihood estimation of $$p$$ and $$\alpha$$ values, and inference using the EM-algorithm.
 8. Mortazavi, A., Williams, B. A., McCue, K., Schaeffer, L. & Wold, B. Mapping and quantifying mammalian transcriptomes by RNA-Seq. *Nature Methods* 5, 621–628 (2008). [doi:10.1038/nmeth.1226](https://doi.org/10.1038/nmeth.1226).
    - One of the original RNA-seq papers; introduces RPKM metric. See [Wikipedia](https://en.wikipedia.org/wiki/RNA-Seq#History), [Lior Pachter's \*Seq chronology](https://liorpachter.wordpress.com/seq/), and [this blog post](http://nextgenseek.com/2014/03/the-first-published-paper-on-rna-seq-setting-the-record-straight/).
-9. Trapnell, C. et al. Transcript assembly and quantification by RNA-Seq reveals unannotated transcripts and isoform switching during cell differentiation. *Nature Biotechnology* 28, 511–515 (2010). [doi:10.1038/nbt.1621](https://doi.org/10.1038/nbt.1621).
+9.  Trapnell, C. et al. Transcript assembly and quantification by RNA-Seq reveals unannotated transcripts and isoform switching during cell differentiation. *Nature Biotechnology* 28, 511–515 (2010). [doi:10.1038/nbt.1621](https://doi.org/10.1038/nbt.1621).
    - Cufflinks paper; introduces FPKM metric.
-10. Li, B. & Dewey, C. N. RSEM: accurate transcript quantification from RNA-Seq data with or without a reference genome. *BMC Bioinformatics* 12, 323 (2011). [doi:10.1186/1471-2105-12-323](https://doi.org/10.1186/1471-2105-12-323).
+11. Li, B. & Dewey, C. N. RSEM: accurate transcript quantification from RNA-Seq data with or without a reference genome. *BMC Bioinformatics* 12, 323 (2011). [doi:10.1186/1471-2105-12-323](https://doi.org/10.1186/1471-2105-12-323).
     - RSEM paper; introduces TPM metric.
-11. Pachter, L. Estimating number of transcripts from RNA-Seq measurements (and why I believe in paywall). *Bits of DNA* (2014). [https://liorpachter.wordpress.com/2014/04/30/estimating-number-of-transcripts-from-rna-seq-measurements-and-why-i-believe-in-paywall/](https://liorpachter.wordpress.com/2014/04/30/estimating-number-of-transcripts-from-rna-seq-measurements-and-why-i-believe-in-paywall/).
+12. Pachter, L. Estimating number of transcripts from RNA-Seq measurements (and why I believe in paywall). *Bits of DNA* (2014). [https://liorpachter.wordpress.com/2014/04/30/estimating-number-of-transcripts-from-rna-seq-measurements-and-why-i-believe-in-paywall/](https://liorpachter.wordpress.com/2014/04/30/estimating-number-of-transcripts-from-rna-seq-measurements-and-why-i-believe-in-paywall/).
     - Explains why the FPKM value of a single gene cannot be converted to "transcripts per cell" without knowing the FPKM values of all genes.
-12. Holmes, S. & Huber, W. *Modern Statistics for Modern Biology*. (Cambridge University Press, 2018). [https://web.stanford.edu/class/bios221/book/index.html](https://web.stanford.edu/class/bios221/book/index.html).
+13. Holmes, S. & Huber, W. *Modern Statistics for Modern Biology*. (Cambridge University Press, 2018). [https://web.stanford.edu/class/bios221/book/index.html](https://web.stanford.edu/class/bios221/book/index.html).
     - [Chapter 4](https://web.stanford.edu/class/bios221/book/Chap-Mixtures.html) derives the negative binomial model as a hierarchical Gamma-Poisson model.
     - [Chapter 8](https://web.stanford.edu/class/bios221/book/Chap-CountData.html) describes the DESeq2 model.
-13. Khatri, P., Sirota, M. & Butte, A. J. Ten Years of Pathway Analysis: Current Approaches and Outstanding Challenges. *PLoS Computational Biology* 8, e1002375 (2012). [doi:10.1371/journal.pcbi.1002375](https://doi.org/10.1371/journal.pcbi.1002375).
+14. Khatri, P., Sirota, M. & Butte, A. J. Ten Years of Pathway Analysis: Current Approaches and Outstanding Challenges. *PLoS Computational Biology* 8, e1002375 (2012). [doi:10.1371/journal.pcbi.1002375](https://doi.org/10.1371/journal.pcbi.1002375).
     - Classifies existing pathway analysis methods (as of 2012) into one of three approaches: ORA, FCS, or PT; analyzes the assumptions and limitations of each approach.
-14. Mootha, V. K. et al. PGC-1α-responsive genes involved in oxidative phosphorylation are coordinately downregulated in human diabetes. *Nature Genetics* 34, 267–273 (2003). [doi:10.1038/ng1180](https://doi.org/10.1038/ng1180).
+15. Mootha, V. K. et al. PGC-1α-responsive genes involved in oxidative phosphorylation are coordinately downregulated in human diabetes. *Nature Genetics* 34, 267–273 (2003). [doi:10.1038/ng1180](https://doi.org/10.1038/ng1180).
     - Preliminary GSEA paper.
-15. Subramanian, A. et al. Gene set enrichment analysis: A knowledge-based approach for interpreting genome-wide expression profiles. *Proc. Natl. Acad. Sci.* 102, 15545–15550 (2005). [doi:10.1073/pnas.0506580102](https://doi.org/10.1073/pnas.0506580102).
+16. Subramanian, A. et al. Gene set enrichment analysis: A knowledge-based approach for interpreting genome-wide expression profiles. *Proc. Natl. Acad. Sci.* 102, 15545–15550 (2005). [doi:10.1073/pnas.0506580102](https://doi.org/10.1073/pnas.0506580102).
     - Robust GSEA paper. Describes software package `GSEA-P` and the creation of the Molecular Signature Database (MSigDB).
-16. Tomczak, A. et al. Interpretation of biological experiments changes with evolution of the Gene Ontology and its annotations. *Scientific Reports* 8, 5115 (2018). [doi:10.1038/s41598-018-23395-2](https://doi.org/10.1038/s41598-018-23395-2).
+17. Tomczak, A. et al. Interpretation of biological experiments changes with evolution of the Gene Ontology and its annotations. *Scientific Reports* 8, 5115 (2018). [doi:10.1038/s41598-018-23395-2](https://doi.org/10.1038/s41598-018-23395-2).
     - > Our analysis suggests that GO evolution may have affected the interpretation and possibly reproducibility of experiments over time.
-17. Haynes, W. A., Tomczak, A. & Khatri, P. Gene annotation bias impedes biomedical research. *Scientific Reports* 8, 1362 (2018). [doi:10.1038/s41598-018-19333-x](https://doi.org/10.1038/s41598-018-19333-x).
+18. Haynes, W. A., Tomczak, A. & Khatri, P. Gene annotation bias impedes biomedical research. *Scientific Reports* 8, 1362 (2018). [doi:10.1038/s41598-018-19333-x](https://doi.org/10.1038/s41598-018-19333-x).
     - > Collectively, our results provide an evidence of a strong research bias in literature that focuses on well-annotated genes instead of those with the most significant disease relationship in terms of both expression and genetic variation.
-18. Tarca, A. L. et al. A novel signaling pathway impact analysis. *Bioinformatics* 25, 75–82 (2009). [doi:10.1093/bioinformatics/btn577](https://doi.org/10.1093/bioinformatics/btn577).
+19. Tarca, A. L. et al. A novel signaling pathway impact analysis. *Bioinformatics* 25, 75–82 (2009). [doi:10.1093/bioinformatics/btn577](https://doi.org/10.1093/bioinformatics/btn577).
     - SPIA paper.
