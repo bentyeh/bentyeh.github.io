@@ -272,3 +272,14 @@ hr {
   color: #007bff;
   text-decoration: none;
 }
+
+.toggle-nav {
+  float: right;
+  position: sticky;
+  height: min-content;
+}
+
+#show-sidebar {
+  top: 0.5rem;
+  padding-top: 0.5rem;
+}

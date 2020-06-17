@@ -5,13 +5,15 @@ toc_nav_id: toc-nav
 
 {%- if page.use_toc -%}
     <div class="row">
-        <main class="col-xl-9">
+        <main class="col-xl-9" id="main">
+            <button type="button" class="btn btn-light d-none toggle-nav" id="show-sidebar" title="Show Sidebar" onclick="toggleNav()">☰</button>
             <h2>Contents</h2>
             {% include toc.html html=content %}
             {{ content }}
         </main>
 
         <nav class="d-none d-xl-block col-xl-3 toc-nav" id="{{ layout.toc_nav_id }}">
+            <button type="button" class="btn btn-light toggle-nav" id="hide-sidebar" title="Hide Sidebar" onclick="toggleNav()">☰</button>
             <h5 class="toc-nav-title">Contents</h5>
             {% include toc.html html=content class="nav" anchor_class="nav-link" %}
         </nav>
