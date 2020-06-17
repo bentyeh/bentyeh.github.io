@@ -59,6 +59,28 @@ layout: compress
     </script>
   {% endif %}
 
+  {% if page.use_toc %}
+  <script>
+    function toggleNav() {
+      if (document.getElementById("main").classList.contains("col-xl-9")) {
+        // change sidebar from displayed to hidden
+        document.getElementById("{{ layout.toc_nav_id }}").classList.remove("d-xl-block");
+        document.getElementById("main").classList.remove("col-xl-9");
+        document.getElementById("main").classList.add("col-xl-12");
+        document.getElementById("show-sidebar").classList.remove("d-none");
+        document.getElementById("hide-sidebar").classList.add("d-none");
+      } else {
+        // change sidebar from hidden to displayed
+        document.getElementById("{{ layout.toc_nav_id }}").classList.add("d-xl-block");
+        document.getElementById("main").classList.remove("col-xl-12");
+        document.getElementById("main").classList.add("col-xl-9");
+        document.getElementById("show-sidebar").classList.add("d-none");
+        document.getElementById("hide-sidebar").classList.remove("d-none");
+      }
+    }
+  </script>
+  {% endif %}
+
   {% include analytics.html %}
 </head>
 
