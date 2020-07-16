@@ -6,6 +6,8 @@ use_math: true
 use_code: true
 excerpt: An introduction to cell mixture deconvolution and applications based on material taught in Stanford IMMUNOL 207, Spring 2020.
 last_updated: 2020-05-20
+tags: [gene-expression]
+category: bioinformatics
 ---
 
 # Deconvolution

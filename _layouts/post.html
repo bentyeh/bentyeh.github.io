@@ -35,3 +35,17 @@ toc_nav_id: toc-nav
 {%- else -%}
   <i>Posted: {{ page.date | date: site.date_format }}.</i>
 {%- endif -%}
+
+{%- if page.tags.size > 0 -%}
+  <br><span><i>Tags: </i>
+    {%- for tag in page.tags -%}
+      <a href="/tags/#{{ tag }}" class="post-meta post-tag"><i class="fas fa-tag"></i>{{ tag }}</a>
+    {%- endfor -%}
+  </span>
+{%- endif -%}
+
+{%- if page.category -%}
+  <br><span><i>Category: </i>
+  <a href="/categories/#{{ page.category }}" class="post-meta post-tag"><i class="fas fa-bookmark"></i>{{ page.category }}</a>
+  </span>
+{%- endif -%}

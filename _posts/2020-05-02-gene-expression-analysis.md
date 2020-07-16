@@ -5,6 +5,8 @@ use_toc: true
 use_math: true
 excerpt: Why is the negative binomial distribution used to model sequencing read counts? What do FPKM and TPM mean? What are common models of differential gene expression and pathway analysis?
 last_updated: 2020-06-08
+tags: [gene-expression]
+category: bioinformatics
 ---
 
 $$
