@@ -62,21 +62,14 @@ layout: compress
   {% if page.use_toc %}
   <script>
     function toggleNav() {
-      if (document.getElementById("main").classList.contains("col-xl-9")) {
-        // change sidebar from displayed to hidden
-        document.getElementById("{{ layout.toc_nav_id }}").classList.remove("d-xl-block");
-        document.getElementById("main").classList.remove("col-xl-9");
-        document.getElementById("main").classList.add("col-xl-12");
-        document.getElementById("show-sidebar").classList.remove("d-none");
-        document.getElementById("hide-sidebar").classList.add("d-none");
-      } else {
-        // change sidebar from hidden to displayed
-        document.getElementById("{{ layout.toc_nav_id }}").classList.add("d-xl-block");
-        document.getElementById("main").classList.remove("col-xl-12");
-        document.getElementById("main").classList.add("col-xl-9");
-        document.getElementById("show-sidebar").classList.add("d-none");
-        document.getElementById("hide-sidebar").classList.remove("d-none");
-      }
+      var nav_toc = document.getElementById("{{ layout.toc_nav_id }}");
+      var main = document.getElementById("main");
+      var show_sidebar_button = document.getElementById("show-sidebar");
+
+      nav_toc.classList.toggle("d-xl-block");
+      main.classList.toggle("col-xl-9");
+      main.classList.toggle("col-xl-12");
+      show_sidebar_button.classList.toggle("d-xl-block");
     }
   </script>
   {% endif %}
@@ -84,7 +77,11 @@ layout: compress
   {% include analytics.html %}
 </head>
 
+{%- if page.use_toc -%}
 <body data-spy="scroll" data-target="#{{ layout.toc_nav_id }}">
+{%- else -%}
+<body>
+{%- endif -%}
   {% include navbar.html %}
 
   <div class="container">
