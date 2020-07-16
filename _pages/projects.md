@@ -2,7 +2,6 @@
 title: Projects
 layout: default
 permalink: /projects/
-use_fontawesome: true
 categories:
   - research
   - experience

@@ -1,6 +1,5 @@
 ---
 layout: home
-use_fontawesome: true
 use_academicons: true
 use_code: true
 use_math: true

@@ -1,4 +1,4 @@
-Personal website at [bentyeh.github.io/](https://bentyeh.github.io/).
+Personal website at [bentyeh.github.io](https://bentyeh.github.io/).
 
 # Build
 
@@ -12,10 +12,9 @@ Options
 # Layouts hierarchy
 
 - compress.html: Jekyll layout that compresses HTML (credits: https://github.com/penibelst/jekyll-compress-html)
-  - default.html: used by about and projects pages
+  - default.html: used by about, blog, and projects pages
     - home.html: used by index page
     - post.html: used by blog posts and individual projects
-    - blog.html: used by blog page
 
 # Frontmatter variables
 
@@ -28,7 +27,6 @@ Variable            | Description
 `description`       | description of page
 `permalink`         | relative URL path to serve page
 `use_code`          | boolean, set to `true` to include code-highlighting CSS
-`use_fontawesome`   | boolean, set to `true` to include FontAwesome CSS
 `use_academicons`   | boolean, set to `true` to include Academicons CSS
 `use_math`          | boolean, set to `true` to include MathJax JS
 `use_toc`           | boolean, set to `true` to include a table of contents
@@ -58,4 +56,11 @@ Variable            | Description
 `github`            | link to GitHub repo; adds icon
 `video`             | link to video presentation; adds icon
 
-Theme borrowed with permission from https://chrisyeh96.github.io/.
+### Post-specific
+
+Variable            | Description
+------------------- | -----------
+`category`          | post category (1 per post)
+`tags`              | tags (many per post)
+
+Theme borrowed with permission from https://chrisyeh96.github.io.
