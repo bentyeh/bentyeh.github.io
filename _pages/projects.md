@@ -6,6 +6,7 @@ categories:
   - research
   - experience
   - projects
+use_academicons: true
 ---
 
 {%- for category in page.categories -%}
@@ -62,12 +63,17 @@ categories:
 
           {%- if project.paper -%}
             <a href="{{ project.paper }}" class="btn btn-light">
-              <i class="fab fa-file"></i> Paper
+              <i class="fas fa-file"></i> Paper
+            </a>
+          {%- endif -%}
+          {%- if project.biorxiv -%}
+            <a href="{{ project.biorxiv }}" class="btn btn-light">
+              <i class="ai ai-biorxiv"></i> Preprint
             </a>
           {%- endif -%}
           {%- if project.demo -%}
-            <a href="{{ project.github }}" class="btn btn-light">
-              <i class="fab fa-external-link-square-alt"></i> Demo
+            <a href="{{ project.demo }}" class="btn btn-light">
+              <i class="fas fa-external-link-square-alt"></i> Demo
             </a>
           {%- endif -%}
           {%- if project.github -%}
