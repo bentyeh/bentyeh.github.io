@@ -1,0 +1,8 @@
+name: ruby
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - ruby
+  - rb-nokogiri
+  - gxx_linux-64

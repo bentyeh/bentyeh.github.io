@@ -1,4 +1,29 @@
-Personal website at [bentyeh.github.io](https://bentyeh.github.io/).
+# Install Jekyll
+
+We want to [use Jekyll to create a GitHub Pages site](https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/setting-up-a-github-pages-site-with-jekyll). GitHub Pages relies on a set of dependencies, which can be found [here](https://pages.github.com/versions/). To set up a local Jekyll environment in sync with GitHub Pages, we can simply install the `github-pages` Ruby gem ([GitHub repo](https://github.com/github/pages-gem); [RubyGems](https://rubygems.org/gems/github-pages)) provided by GitHub.
+
+To install the `github-pages` Ruby gem within a conda environment, a couple options are suggested below.
+
+1. (Recommended) Create a new conda environment named `ruby` with required dependencies using the `env_ruby.yml` requirements file provided in the repo.
+
+```bash
+conda env update -f env_ruby.yml --prune
+conda activate ruby
+gem install github-pages
+```
+
+If `gem install github-pages` fails, there may be missing system libraries and compilation tools. If running Ubuntu, try the following:
+
+```bash
+sudo apt update  # update package index
+sudo apt upgrade build-essential  # compilation tools
+```
+
+2. (Easier, but may be outdated) Directly install the [compiled `github-pages` gem from the `conda-forge` channel](https://anaconda.org/conda-forge/rb-github-pages).
+
+```bash
+conda install conda-forge::rb-github-pages
+```
 
 # Build
 
@@ -6,12 +31,12 @@ Build locally: `jekyll build [options]`
 Serve locally: `jekyll serve [options]`
 
 Options
-- `--baseurl /~bentyeh`: add this if hosting this site at some non-root domain (e.g., *.com/~bentyeh)
+- `--baseurl /~<name>`: add this if hosting this site at some non-root domain (e.g., *.com/~\<name\>)
 - `--drafts`: to show drafts among the latest posts
 
 # Layouts hierarchy
 
-- compress.html: Jekyll layout that compresses HTML (credits: https://github.com/penibelst/jekyll-compress-html)
+- compress.html: Jekyll layout that compresses HTML (see [Credits](#Credits))
   - default.html: used by about, blog, and projects pages
     - home.html: used by index page
     - post.html: used by blog posts and individual projects
@@ -48,10 +73,11 @@ Variable            | Description
 `team`              | team members
 `mentors`           | mentors
 `collaborators`     | collaborators
-`abstract`          | abstract
+`abstract`          | abstract (only shown on project list page, not on the post page; compare with `excerpt`)
 `thumbnail`         | link to thumbnail image
 `thumbnail_caption` | caption below thumbnail image
 `paper`             | link to paper; adds icon
+`biorxiv`           | link to bioRxiv preprint; adds icon
 `demo`              | link to demo; adds icon
 `github`            | link to GitHub repo; adds icon
 `video`             | link to video presentation; adds icon
@@ -63,4 +89,8 @@ Variable            | Description
 `category`          | post category (1 per post)
 `tags`              | tags (many per post)
 
-Theme borrowed with permission from https://chrisyeh96.github.io.
+# Credits
+
+- Theme: borrowed with permission from https://chrisyeh96.github.io
+- `_layouts/compress.html`: https://github.com/penibelst/jekyll-compress-html
+- `_layouts/toc.html`: Table of contents generator from https://github.com/allejo/jekyll-toc

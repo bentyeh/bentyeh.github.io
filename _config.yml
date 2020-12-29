@@ -3,11 +3,13 @@ title: Benjamin Yeh
 highlighter: rouge
 date_format: "%b %-d, %Y"
 
+permalink: /blog/:year:month:day_:title:output_ext
+
 ##### COLLECTIONS #####
 collections:
   projects:
     output: true
-    permalink: /:collection/:path/
+    permalink: /:collection/:path:output_ext
 
 ##### SOCIAL INTEGRATION #####
 github_username: bentyeh
@@ -19,7 +21,13 @@ orcid_id: 0000-0001-9397-6392
 ##### BUILD SETTINGS #####
 incremental: true
 
-include: ['_pages']
+include:
+  - _pages
+
+exclude:
+  - env_ruby.yml
+  - LICENSE
+  - README.md
 
 # strip all unncessary whitespace and comments
 # http://jch.penibelst.de/
