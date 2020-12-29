@@ -4,7 +4,9 @@ layout: default
 permalink: /blog/
 ---
 
-Posts below are sorted by date published. Alternatively, explore posts by <a href="/category/">category <i class="fas fa-bookmark"></i></a> or <a href="/tags/">tags <i class="fas fa-tag"></i></a>.
+<h1 class="page-title">{{ page.title | escape | markdownify | remove: '<p>' | remove: '</p>' }}</h1>
+
+Posts below are sorted by date published. Alternatively, explore posts by <a href="/tags/">tags <i class="fas fa-tag"></i></a>.
 
 <ul class="post-list">
 {%- for post in site.posts -%}

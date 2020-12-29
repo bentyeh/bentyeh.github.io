@@ -7,7 +7,6 @@ use_math: true
 hidden: true
 excerpt: We consider biological and technical variance, and how to estimate each type of variance from experimental data.
 tags: experimental-design
-category: statistics
 ---
 
 ## Problem

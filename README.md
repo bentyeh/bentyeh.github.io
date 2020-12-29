@@ -86,7 +86,6 @@ Variable            | Description
 
 Variable            | Description
 ------------------- | -----------
-`category`          | post category (1 per post)
 `tags`              | tags (many per post)
 
 # Credits

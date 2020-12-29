@@ -6,7 +6,6 @@ use_math: true
 excerpt: Saliency maps, Integrated Gradients, and DeepLIFT explained.
 hidden: true
 tags: [deep-learning, model-interpretation]
-category: deep-learning
 ---
 
 Let $$f: \mathbb{R}^n \rightarrow \mathbb{R}$$ be the function represented by a neural network.

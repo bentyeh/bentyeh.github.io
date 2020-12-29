@@ -6,7 +6,6 @@ use_math: true
 excerpt: Given a set of corresponding points in two images, how can you align them? What if the pixel aspect ratios in the two images are different?
 last_updated: 2020-06-21
 tags: [images, geometry]
-category: geometry
 ---
 
 # Representation
