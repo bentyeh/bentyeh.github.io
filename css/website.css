@@ -59,7 +59,7 @@ img {
   list-style: none;
 }
 
-.post-list li {
+.post-list > li {
   margin-bottom: 1.5em;
 }
 

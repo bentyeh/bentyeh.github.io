@@ -31,9 +31,9 @@ use_academicons: true
           <h2>
             {%- assign content = project.content | strip_newlines -%}
             {%- if content == "" -%}
-              {{ project.title | escape | markdownify }}
+              {{ project.title | escape | markdownify | remove: '<p>' | remove: '</p>' }}
             {%- else -%}
-              <a class="post-link" href="{{ project.url | relative_url }}" title="{{ project.title }}">{{ project.title | escape | markdownify }}</a>
+              <a class="post-link" href="{{ project.url | relative_url }}" title="{{ project.title }}">{{ project.title | escape | markdownify | remove: '<p>' | remove: '</p>' }}</a>
             {%- endif -%}
           </h2>
 
@@ -54,38 +54,24 @@ use_academicons: true
           {%- endif -%}
 
           {%- if project.abstract -%}
-            <p><strong>Abstract:</strong> {{ project.abstract }}</p>
+            {{ project.abstract | markdownify }}</p>
           {%- endif -%}
 
           {%- if project.excerpt -%}
-            <p>{{ project.excerpt }}</p>
+            {{ project.excerpt | markdownify }}
           {%- endif -%}
 
-          {%- if project.paper -%}
-            <a href="{{ project.paper }}" class="btn btn-light">
-              <i class="fas fa-file"></i> Paper
+          {%- for media in project.media -%}
+            <a href="{{ media.url }}" class="btn btn-light mr-2">
+              {%- if media.type == "file" -%}<i class="fas fa-file"></i>
+              {%- elsif media.type == "biorxiv" -%}<i class="ai ai-biorxiv"></i>
+              {%- elsif media.type == "github" -%}<i class="fab fa-github"></i>
+              {%- elsif media.type == "video" -%}<i class="fab fa-youtube"></i>
+              {%- else -%}<i class="fas fa-external-link-square-alt"></i>
+              {%- endif -%}
+              &nbsp;{{ media.name }}
             </a>
-          {%- endif -%}
-          {%- if project.biorxiv -%}
-            <a href="{{ project.biorxiv }}" class="btn btn-light">
-              <i class="ai ai-biorxiv"></i> Preprint
-            </a>
-          {%- endif -%}
-          {%- if project.demo -%}
-            <a href="{{ project.demo }}" class="btn btn-light">
-              <i class="fas fa-external-link-square-alt"></i> Demo
-            </a>
-          {%- endif -%}
-          {%- if project.github -%}
-            <a href="{{ project.github }}" class="btn btn-light">
-              <i class="fab fa-github"></i> GitHub
-            </a>
-          {%- endif -%}
-          {%- if project.video -%}
-            <a href="{{ project.video }}" class="btn btn-light">
-              <i class="fab fa-youtube"></i> Video
-            </a>
-          {%- endif -%}
+          {%- endfor -%}
         </div>
       </div>
 
