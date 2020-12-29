@@ -5,6 +5,8 @@ hidden: true
 permalink: /tags/
 ---
 
+<h1 class="page-title">{{ page.title | escape | markdownify | remove: '<p>' | remove: '</p>' }}</h1>
+
 {% assign sorted_tags = site.tags | sort %}
 
 {%- for tag in sorted_tags -%}

@@ -3,6 +3,14 @@ layout: default
 toc_nav_id: toc-nav
 ---
 
+<h1 class="page-title">{{ page.title | escape | markdownify | remove: '<p>' | remove: '</p>' }}</h1>
+{%- if page.description -%}
+  <h5 class="page-description">{{ page.description }}</h5>
+{%- endif -%}
+{%- if page.excerpt -%}
+  {{ page.excerpt | markdownify }}
+{%- endif -%}
+
 {%- if page.use_toc -%}
   <div class="row">
     <main class="col-xl-9" id="main">
