@@ -74,13 +74,9 @@ Variable            | Description
 `mentors`           | mentors
 `collaborators`     | collaborators
 `abstract`          | abstract (only shown on project list page, not on the post page; compare with `excerpt`)
-`thumbnail`         | link to thumbnail image
+`thumbnail`         | path to thumbnail image
 `thumbnail_caption` | caption below thumbnail image
-`paper`             | link to paper; adds icon
-`biorxiv`           | link to bioRxiv preprint; adds icon
-`demo`              | link to demo; adds icon
-`github`            | link to GitHub repo; adds icon
-`video`             | link to video presentation; adds icon
+`media`             | unordered list of external content; specify `url`, `name`, and `type` fields (edit `_pages/projects.md` to support additional types)
 
 ### Post-specific
 
