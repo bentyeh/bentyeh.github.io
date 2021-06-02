@@ -4,7 +4,7 @@ We want to [use Jekyll to create a GitHub Pages site](https://docs.github.com/en
 
 To install the `github-pages` Ruby gem within a conda environment, a couple options are suggested below.
 
-1. (Recommended) Create a new conda environment named `ruby` with required dependencies using the `env_ruby.yml` requirements file provided in the repo.
+**1. (Recommended) Create a new conda environment named `ruby` with required dependencies using the `env_ruby.yml` requirements file provided in the repo.**
 
 ```bash
 conda env update -f env_ruby.yml --prune
@@ -19,10 +19,23 @@ sudo apt update  # update package index
 sudo apt upgrade build-essential  # compilation tools
 ```
 
-2. (Easier, but may be outdated) Directly install the [compiled `github-pages` gem from the `conda-forge` channel](https://anaconda.org/conda-forge/rb-github-pages).
+To update the environment:
+
+```bash
+gem update github-pages # update github-pages Ruby gem
+gem cleanup # Clean up old versions of installed gems
+```
+
+**2. (Easier, but may be outdated) Directly install the [compiled `github-pages` gem from the `conda-forge` channel](https://anaconda.org/conda-forge/rb-github-pages).**
 
 ```bash
 conda install conda-forge::rb-github-pages
+```
+
+To update the environment:
+
+```bash
+conda update rb-github-pages
 ```
 
 # Build
