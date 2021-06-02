@@ -65,6 +65,7 @@ use_academicons: true
             <a href="{{ media.url }}" class="btn btn-light mr-2">
               {%- if media.type == "file" -%}<i class="fas fa-file"></i>
               {%- elsif media.type == "biorxiv" -%}<i class="ai ai-biorxiv"></i>
+              {%- elsif media.type == "open-access" -%}<i class="ai ai-open-access"></i>
               {%- elsif media.type == "github" -%}<i class="fab fa-github"></i>
               {%- elsif media.type == "video" -%}<i class="fab fa-youtube"></i>
               {%- else -%}<i class="fas fa-external-link-square-alt"></i>

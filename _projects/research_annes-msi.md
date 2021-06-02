@@ -2,7 +2,7 @@
 layout: post
 category: research
 title: Mass Spectrometry Imaging for Measuring *in vivo* Targeted Drug Delivery
-setting: Stanford University School of Medicine, 2018 - present
+setting: Stanford University School of Medicine, 2018 - December 2020
 mentors: Dr. Justin Annes
 collaborators: Dr. Richard Zare, Sarah Noll
 thumbnail: /images/projects_research_annes-msi.png
